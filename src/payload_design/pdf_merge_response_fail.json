@@ -1,0 +1,7 @@
+{
+    "resp": "fail",
+    "error": {
+        "message": "Error merging documents",
+        "httpStatus": 302
+    }
+}
