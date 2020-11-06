@@ -14,19 +14,9 @@ public class Base64Utils {
 
 	public static void main(String args[]) throws Exception {
 
-		//String sourceFile = "C:\\Users\\176899\\github_projects\\DocumentMerge\\test_files\\pdfsample1.pdf";
-		//String sourceFile = "C:\\Users\\176899\\github_projects\\DocumentMerge\\test_files\\pdfsample2.pdf";
-		//String sourceFile = "C:\\Users\\176899\\github_projects\\DocumentMerge\\test_files\\RecordOfProceedings_1.5.pdf";
-		//String targetFile = "C:\\Users\\176899\\github_projects\\DocumentMerge\\test_files\\pdfsample1.dat";
-		//String targetFile = "C:\\Users\\176899\\github_projects\\DocumentMerge\\test_files\\pdfsample2.dat";
-		//String targetFile = "C:\\Users\\176899\\github_projects\\DocumentMerge\\test_files\\RecordOfProceedings_1.5.dat";
-		//String sourceFile = "C:\\Users\\176899\\github_projects\\DocumentMerge\\test_files\\outtest1.dat";
-		String sourceFile = "C:\\Users\\176899\\github_projects\\DocumentMerge\\test_files\\outtest2.dat";
-		//String decodedFile = "C:\\Users\\176899\\github_projects\\DocumentMerge\\test_files\\outtest1.pdf";
-		String decodedFile = "C:\\Users\\176899\\github_projects\\DocumentMerge\\test_files\\outtest2.pdf";
+		String sourceFile = args[0];
+		String decodedFile = args[1];
 
-		//encode(sourceFile, targetFile, false);
-		
 		decode(sourceFile, decodedFile);
 		
 	}
