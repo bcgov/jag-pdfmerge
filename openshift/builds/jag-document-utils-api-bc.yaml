@@ -1,0 +1,91 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+labels:
+  template: jag-document-utils-api-template
+metadata:
+  annotations:
+    openshift.io/display-name: Document Utils Build Template
+    description: |-
+      This is a template for an OpenShift Jenkins Pipelines.
+    iconClass: icon-jenkins
+    tags: instant-app,jenkins
+  name: jag-document-utils-build-template
+parameters:
+  - description: The name assigned to all of the frontend objects defined in this template.
+    displayName: Name
+    name: appName
+    required: true
+    value: jag-document-utils-api
+  - description: Openshift namespace prefix
+    displayName: Namespace Prefix
+    name: namespacePrefix
+    required: true
+    value: 735b8b
+  - description: URL to Github Repository
+    displayName: Github URL
+    name: githubURL
+    required: true
+    value: https://github.com/bcgov/jag-document-utils
+  - description: Target Branch on Github
+    displayName: Github target Branch
+    name: githubBranch
+    required: true
+    value: main
+  - description: Github Context Directory
+    displayName: Context Directory
+    name: contextDirectory
+    required: true
+    value: /src
+  - description: Jenkins Pod Type
+    displayName: Jenkins Pod Type
+    name: jenkinsPod
+    required: true
+    value: maven
+  - description: Pipeline Lifecycle Webhook
+    displayName: Webhook for devops lifecycle output updates
+    name: lifeCycleWebhook
+objects:
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      description: Defines how to build the application
+    labels:
+      app: ${appName}
+      template: document-utils-api-template
+    name: ${appName}
+    namespace: ${namespacePrefix}-tools
+  spec:
+    completionDeadlineSeconds: 1800
+    failedBuildsHistoryLimit: 5
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: '${appName}:latest'
+    postCommit: {}
+    resources:
+      limits:
+        cpu: '4'
+        memory: 4Gi
+      requests:
+        cpu: '1'
+        memory: 1Gi
+    runPolicy: Serial
+    source:
+      contextDir: ${contextDirectory}
+      git:
+        ref: ${githubBranch}
+        uri: ${githubURL}
+      type: Git
+    strategy:
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: 'java:8'
+          namespace: openshift
+      type: Source
+    successfulBuildsHistoryLimit: 5
+    triggers: []
+  status:
+    lastVersion: 0
