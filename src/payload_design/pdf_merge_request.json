@@ -1,0 +1,20 @@
+{
+   "options":{
+      "forcePDFAOnLoad": true,
+      "createToC": true
+   },
+   "documents":[
+      {
+         "id":"optional",
+         "docType":"pdf",
+         "order":1,
+         "data":"SGVsbG9Xb3JsZA=="
+      },
+      {
+         "id":"optional",
+         "docType":"pdf",
+         "order":2,
+         "data":"SGVsbG9Xb3JsZA=="
+      }
+   ]
+}
