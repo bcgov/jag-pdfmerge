@@ -79,7 +79,7 @@ jobs:
       # Formatting the BACKEND coverage reports generated (dynamically)
       - name: Format BACKEND coverage reports
         run: |
-          JACOCO_SOURCE_PATH=${{ github.workspace }}/src/main/java ./cc-test-reporter format-coverage ${{github.workspace}}/src/target/site/jacoco/jacoco.xml --input-type jacoco --output coverage/src-codeclimate.json;
+          JACOCO_SOURCE_PATH=${{ github.workspace }}/src/src/main/java ./cc-test-reporter format-coverage ${{github.workspace}}/src/target/site/jacoco/jacoco.xml --input-type jacoco --output coverage/src-codeclimate.json;
       # Upload total coverage report to Code Climate
       - name: Upload coverage report to Code Climate
         run: ./cc-test-reporter upload-coverage -i coverage/src-codeclimate.json
