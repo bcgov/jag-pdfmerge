@@ -1,0 +1,48 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  annotations:
+    description: Defines how to build the application
+    kubectl.kubernetes.io/last-applied-configuration: >
+      {"apiVersion":"build.openshift.io/v1","kind":"BuildConfig","metadata":{"annotations":{"description":"Defines
+      how to build the
+      application"},"labels":{"app":"jag-document-utils-api","template":"search-api-template"},"name":"jag-document-utils-api","namespace":"qzaydf-tools"},"spec":{"completionDeadlineSeconds":1800,"nodeSelector":null,"output":{"to":{"kind":"ImageStreamTag","name":"efiling-api:latest"}},"postCommit":{},"resources":{"limits":{"cpu":"4","memory":"4Gi"},"requests":{"cpu":"1","memory":"1Gi"}},"runPolicy":"Serial","source":{"contextDir":"src/backend/efiling-api","git":{"ref":"master","uri":"https://github.com/bcgov/jag-file-submission"},"type":"Git"},"strategy":{"sourceStrategy":{"env":[{"name":"MAVEN_MIRROR_URL","value":"http://nexus:8081/repository/fla-backend-group/"}],"from":{"kind":"ImageStreamTag","name":"java:8","namespace":"openshift"}},"type":"Source"},"triggers":[]},"status":{"lastVersion":0}}
+  labels:
+    app: jag-document-utils-api
+    template: search-api-template
+  name: jag-document-utils-api
+  namespace: ag-pssg-is-tools
+spec:
+  completionDeadlineSeconds: 1800
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'jag-document-utils-api:latest'
+  postCommit: {}
+  resources:
+    limits:
+      cpu: '4'
+      memory: 4Gi
+    requests:
+      cpu: '1'
+      memory: 1Gi
+  runPolicy: Serial
+  source:
+    contextDir: src/jag-document-utils-api
+    git:
+      ref: master
+      uri: 'https://github.com/bcgov/jag-document-utils'
+    type: Git
+  strategy:
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        name: 'java:8'
+        namespace: openshift
+    type: Source
+  successfulBuildsHistoryLimit: 5
+  triggers: []
+status:
+  lastVersion: 0
