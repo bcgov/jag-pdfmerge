@@ -1,8 +1,8 @@
 package ca.bc.gov.open.pssg.docmerge.controller;
 
 import javax.validation.Valid;
+import javax.xml.soap.MessageFactory;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -22,6 +22,8 @@ import ca.bc.gov.open.pssg.docmerge.utils.DocMergeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.MessageFormat;
+
 /**
  * 
  * Main RESTful controller. 
@@ -33,11 +35,14 @@ import org.slf4j.LoggerFactory;
 @RestController
 @Validated
 public class MergeController {
-	
-	@Autowired
-	private MergeService mergeService;
+
+	private final MergeService mergeService;
 	
 	private final Logger logger = LoggerFactory.getLogger(MergeController.class);
+
+	public MergeController(MergeService mergeService) {
+		this.mergeService = mergeService;
+	}
 
 	@PostMapping(value = {"/merge/{correlationId}" }, 
 			consumes = DocMergeConstants.JSON_CONTENT, 
@@ -47,7 +52,7 @@ public class MergeController {
 			@Valid @RequestBody(required = true)  DocMergeRequest request)  {
 		
 		logger.info("Starting merge process...");
-		
+
 		try {
 			
 			DocMergeResponse mergResp = mergeService.mergePDFDocuments(request, correlationId);
@@ -56,12 +61,12 @@ public class MergeController {
 			return new ResponseEntity<>(resp, HttpStatus.OK);
 			
 		} catch (MergeException e) {
-			
-			e.printStackTrace();
-			logger.error("Document Merge encountered an error " + e.getMessage());
+
+			logger.error(MessageFormat.format("Document Merge encountered an error: {0}", e.getMessage()), e);
 			return new ResponseEntity<>(
-					DocMergeUtils.buildErrorResponse(String.format(DocMergeConstants.NOT_PROCESSED_ERROR, correlationId), 404),
-					HttpStatus.NOT_FOUND);
+					DocMergeUtils.buildErrorResponse(String.format(DocMergeConstants.NOT_PROCESSED_ERROR, correlationId), 500),
+					HttpStatus.INTERNAL_SERVER_ERROR);
+
 		}
 	}
 
