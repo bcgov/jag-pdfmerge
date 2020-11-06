@@ -2,6 +2,16 @@
 
 A RESTful Document Merge Service. 
 
+## Configuration
+
+| Name | type | Required | Description |
+| --- | --- | --- | --- |
+| SERVER_PORT | integer | false | Default is 8080 |
+| DOCMERGE_AEM_ENDPOINT | string | true | the AEM server endpoint |
+| DOCMERGE_AEM_USER | string | true | the AEM server user |
+| DOCMERGE_AEM_PASSWORD | string | true | the AEM server password |
+
+
 ## Swagger-UI endpoint
 http://localhost:8082/docmerge/swagger-ui.html
 
