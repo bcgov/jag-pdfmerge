@@ -1,6 +1,7 @@
 package ca.bc.gov.open.pssg.docmerge.controller;
 
 import javax.validation.Valid;
+import javax.xml.soap.MessageFactory;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,8 @@ import ca.bc.gov.open.pssg.docmerge.utils.DocMergeUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.text.MessageFormat;
 
 /**
  * 
@@ -49,7 +52,7 @@ public class MergeController {
 			@Valid @RequestBody(required = true)  DocMergeRequest request)  {
 		
 		logger.info("Starting merge process...");
-		
+
 		try {
 			
 			DocMergeResponse mergResp = mergeService.mergePDFDocuments(request, correlationId);
@@ -59,7 +62,7 @@ public class MergeController {
 			
 		} catch (MergeException e) {
 
-			logger.error("Document Merge encountered an error ", e);
+			logger.error(MessageFormat.format("Document Merge encountered an error: {0}", e.getMessage()), e);
 			return new ResponseEntity<>(
 					DocMergeUtils.buildErrorResponse(String.format(DocMergeConstants.NOT_PROCESSED_ERROR, correlationId), 500),
 					HttpStatus.INTERNAL_SERVER_ERROR);
