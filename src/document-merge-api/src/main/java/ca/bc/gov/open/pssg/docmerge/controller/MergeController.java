@@ -2,7 +2,6 @@ package ca.bc.gov.open.pssg.docmerge.controller;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -33,11 +32,14 @@ import org.slf4j.LoggerFactory;
 @RestController
 @Validated
 public class MergeController {
-	
-	@Autowired
-	private MergeService mergeService;
+
+	private final MergeService mergeService;
 	
 	private final Logger logger = LoggerFactory.getLogger(MergeController.class);
+
+	public MergeController(MergeService mergeService) {
+		this.mergeService = mergeService;
+	}
 
 	@PostMapping(value = {"/merge/{correlationId}" }, 
 			consumes = DocMergeConstants.JSON_CONTENT, 
@@ -56,12 +58,12 @@ public class MergeController {
 			return new ResponseEntity<>(resp, HttpStatus.OK);
 			
 		} catch (MergeException e) {
-			
-			e.printStackTrace();
-			logger.error("Document Merge encountered an error " + e.getMessage());
+
+			logger.error("Document Merge encountered an error ", e);
 			return new ResponseEntity<>(
-					DocMergeUtils.buildErrorResponse(String.format(DocMergeConstants.NOT_PROCESSED_ERROR, correlationId), 404),
-					HttpStatus.NOT_FOUND);
+					DocMergeUtils.buildErrorResponse(String.format(DocMergeConstants.NOT_PROCESSED_ERROR, correlationId), 500),
+					HttpStatus.INTERNAL_SERVER_ERROR);
+
 		}
 	}
 
