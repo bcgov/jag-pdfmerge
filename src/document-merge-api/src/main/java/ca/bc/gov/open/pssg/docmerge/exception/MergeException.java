@@ -13,20 +13,12 @@ public class MergeException extends Exception {
 
 	private static final long serialVersionUID = 5873442413088571528L;
 
-	private final HttpStatus httpStatus;
-
-	public MergeException(String message, HttpStatus status) {
+	public MergeException(String message) {
 		super(message);
-		this.httpStatus = status;
 	}
 
-	public MergeException(String message, HttpStatus status, Throwable cause) {
+	public MergeException(String message, Throwable cause) {
 		super(message, cause);
-		this.httpStatus = status;
-	}
-
-	public HttpStatus getHttpStatus() {
-		return httpStatus;
 	}
 
 }

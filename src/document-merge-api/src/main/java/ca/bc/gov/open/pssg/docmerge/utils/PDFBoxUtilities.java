@@ -75,10 +75,10 @@ public class PDFBoxUtilities {
 			return PDDocument.load(bis);
 		} catch (InvalidPasswordException e) {
 			e.printStackTrace();
-			throw new MergeException("Password Protected PDF.", HttpStatus.NOT_FOUND);
+			throw new MergeException("Password Protected PDF.");
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new MergeException("File not a PDF.", HttpStatus.NOT_FOUND);
+			throw new MergeException("File not a PDF.");
 		}
 		
 	}

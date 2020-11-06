@@ -153,7 +153,7 @@ public class MergeServiceImpl implements MergeService {
 			
 			logger.error("Failure at mergeDocuments. Reason: " + e.getMessage());
 			e.printStackTrace();
-			throw new MergeException(e.getMessage(), HttpStatus.NOT_FOUND, e);
+			throw new MergeException(e.getMessage(), e);
 		}
 		
 		return resp;

@@ -34,10 +34,11 @@ public class DocMergeExceptionHandler {
 	@ExceptionHandler(MergeException.class)
 	public ResponseEntity<JSONResponse<String>> handleDigitalFormsException(MergeException e,
 			WebRequest request) {
+
 		logger.error("DocMerge Exception occurred", e);
 		MDC.clear();
-		return new ResponseEntity<>(DocMergeUtils.buildErrorResponse(e.getMessage(), e.getHttpStatus().value()),
-				e.getHttpStatus());
+		return new ResponseEntity<>(DocMergeUtils.buildErrorResponse(e.getMessage(), 500), HttpStatus.INTERNAL_SERVER_ERROR);
+
 	}
 
 	@ExceptionHandler(NoHandlerFoundException.class)
@@ -68,6 +69,7 @@ public class DocMergeExceptionHandler {
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<JSONResponse<String>> handleValidationExceptions(MethodArgumentNotValidException e) {
+
 		logger.error("Validation exception(s) occurred", e);
 		
 	    Map<String, String> errors = new HashMap<>();
@@ -88,6 +90,7 @@ public class DocMergeExceptionHandler {
 		MDC.clear();
 		return new ResponseEntity<>(DocMergeUtils.buildErrorResponse(buffer.toString(),
 				HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+
 	}
 
 }
