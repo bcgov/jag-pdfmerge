@@ -51,7 +51,6 @@ public class MergeControllerTest {
     @DisplayName("200: with valid document should merge documents")
     public void itShouldMergeDocuments() {
 
-
         @Valid DocMergeRequest request = new DocMergeRequest();
         List<Document> documents = new ArrayList<>();
 
@@ -84,9 +83,7 @@ public class MergeControllerTest {
         Assertions.assertEquals("the document", actual.getBody().getData().getDocument());
         Assertions.assertEquals("test", actual.getBody().getData().getMimeType());
 
-
     }
-
 
     @Test
     @DisplayName("500: with ANY exception should return 500")
@@ -123,9 +120,7 @@ public class MergeControllerTest {
         Assertions.assertEquals(500, actual.getBody().getError().getHttpStatus());
         Assertions.assertEquals("Request cannot be processed. See logging for correlation id id", actual.getBody().getError().getMessage());
 
-
     }
-
 
 }
 
