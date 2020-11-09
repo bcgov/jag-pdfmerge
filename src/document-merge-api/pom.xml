@@ -177,7 +177,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>ca.bc.gov.open.jag.docmerge.DocumentMergeServiceApplication</mainClass>
+					<mainClass>ca.bc.gov.open.pssg.docmerge.DocumentMergeServiceApplication</mainClass>
 				</configuration>
 			</plugin>
 
