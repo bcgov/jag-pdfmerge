@@ -43,7 +43,7 @@ objects:
   - apiVersion: build.openshift.io/v1
     kind: BuildConfig
     metadata:
-      name: document-utils-pipeline
+      name: jag-document-utils-pipeline
       namespace: 735b8b-tools
       labels:
         application: jag-document-utils-api
