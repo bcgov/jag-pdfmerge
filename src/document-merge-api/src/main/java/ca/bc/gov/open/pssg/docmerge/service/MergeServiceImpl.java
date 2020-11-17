@@ -1,12 +1,7 @@
 package ca.bc.gov.open.pssg.docmerge.service;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -59,14 +54,10 @@ public class MergeServiceImpl implements MergeService {
 
             logger.info("Calling mergePDFDocuments...");
 
-            LinkedList<MergeDoc> pageList = new LinkedList<MergeDoc>();
+            LinkedList<MergeDoc> pageList = new LinkedList();
 
             // Sort the document based on placement id in the event they are mixed. lowest to highest
-            Collections.sort(request.getDocuments(), new Comparator<ca.bc.gov.open.pssg.docmerge.model.Document>() {
-                public int compare(ca.bc.gov.open.pssg.docmerge.model.Document d1, ca.bc.gov.open.pssg.docmerge.model.Document d2) {
-                    return d1.getOrder().compareTo(d2.getOrder());
-                }
-            });
+            request.getDocuments().sort(Comparator.comparing(ca.bc.gov.open.pssg.docmerge.model.Document::getOrder));
 
             // For each document, check if XFA and convert to PDF/A if requested via option.
             for (ca.bc.gov.open.pssg.docmerge.model.Document doc : request.getDocuments()) {
@@ -74,28 +65,28 @@ public class MergeServiceImpl implements MergeService {
                 byte[] thisDoc = Base64Utils.decode(doc.getData().getBytes());
 
                 if (request.getOptions().getForcePDFAOnLoad() && PDFBoxUtilities.isPDFXfa(thisDoc)) {
-                    logger.info("forcePDFA is on and document, order " + doc.getOrder() + ", is XFA. Converting to PDF/A...");
+                    logger.info("forcePDFA is on and document, order {}, is XFA. Converting to PDF/A...", doc.getOrder());
 
                     //call PDF/A transformation
                     thisDoc = createPDFADocument(thisDoc, serviceClientFactory);
                 }
 
                 pageList.add(new MergeDoc(thisDoc));
-                logger.info("Loaded page " + doc.getOrder());
+                logger.info("Loaded page {}", doc.getOrder());
             }
 
             // Use DDXUtils to Dynamically generate the DDX file sent to AEM.
             org.w3c.dom.Document aDDx = DDXUtils.createMergeDDX(pageList, request.getOptions().getCreateToC());
-            logger.info("Dynamically generated DDX : " + DDXUtils.DDXDocumentToString(aDDx));
+            logger.info("Dynamically generated DDX : {}", DDXUtils.dDXDocumentToString(aDDx));
             Document myDDX = DDXUtils.convertDDX(aDDx);
 
             // Create a Map object to store the PDF source documents
             Map<String, Object> inputs = new HashMap<String, Object>();
             Iterator<MergeDoc> it = pageList.iterator();
             while (it.hasNext()) {
-                MergeDoc pageElement = (MergeDoc) it.next();
+                MergeDoc pageElement = it.next();
                 Document pageDocument = new Document(pageElement.getFile());
-                inputs.put(pageElement.getId(), (Object) pageDocument);
+                inputs.put(pageElement.getId(), pageDocument);
             }
 
             // Create an AssemblerOptionsSpec object
@@ -130,9 +121,9 @@ public class MergeServiceImpl implements MergeService {
 
         } catch (Exception e) {
 
-            logger.error("Failure at mergeDocuments. Reason: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Failure at mergeDocuments", e);
             throw new MergeException(e.getMessage(), e);
+
         }
 
         return resp;
