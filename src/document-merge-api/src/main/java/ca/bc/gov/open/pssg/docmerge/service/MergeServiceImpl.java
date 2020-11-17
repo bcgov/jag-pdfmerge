@@ -82,24 +82,13 @@ public class MergeServiceImpl implements MergeService {
             Map<String, Document> allDocs = jobResult.getDocuments();
 
             // Retrieve the result PDF document from the Map object
-            Document outDoc = null;
+            Document outDoc;
 
             // Iterate through the map object to retrieve the result PDF document
-            for (Iterator i = allDocs.entrySet().iterator(); i.hasNext(); ) {
-
-                // Retrieve the Map object’s value
-                Map.Entry e = (Map.Entry) i.next();
-
-                // Get the key name as specified in the DDX document
-                String keyName = (String) e.getKey();
-                if (keyName.equalsIgnoreCase(DocMergeConstants.DDX_OUTPUT_NAME)) {
-
-                    Object o = e.getValue();
-                    outDoc = (Document) o;
-
-                    resp.setDocument(Base64Utils.encodeToString(IOUtils.toByteArray(outDoc.getInputStream())));
-                }
-            }
+            resp.setDocument(allDocs.entrySet().stream()
+                    .filter(mapEntry -> mapEntry.getKey().equalsIgnoreCase(DocMergeConstants.DDX_OUTPUT_NAME))
+                    .map(mapEntry -> buildOutputDocument((Document)mapEntry.getValue()))
+                    .findFirst().get());
 
             resp.setMimeType(DocMergeConstants.PDF_MIME_TYPE);
 
@@ -132,6 +121,15 @@ public class MergeServiceImpl implements MergeService {
 
         logger.info("Loaded page {}", doc.getOrder());
         return new MergeDoc(docBytes);
+    }
+
+    private String buildOutputDocument(Document document) {
+        try {
+            return Base64Utils.encodeToString(IOUtils.toByteArray(document.getInputStream()));
+        } catch (IOException e) {
+            logger.error("Error creating pdf a ", e);
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     /**
