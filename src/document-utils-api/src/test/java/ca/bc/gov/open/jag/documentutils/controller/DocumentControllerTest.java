@@ -1,5 +1,6 @@
 package ca.bc.gov.open.jag.documentutils.controller;
 
+import ca.bc.gov.open.jag.documentutils.api.DocumentController;
 import ca.bc.gov.open.jag.documentutils.model.*;
 import ca.bc.gov.open.jag.documentutils.service.MergeService;
 import ca.bc.gov.open.jag.documentutils.exception.MergeException;
@@ -16,10 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class MergeControllerTest {
+public class DocumentControllerTest {
 
 
-    public MergeController sut;
+    public DocumentController sut;
 
     @Mock
     private MergeService mergeServiceMock;
@@ -44,7 +45,7 @@ public class MergeControllerTest {
                 .when(mergeServiceMock).mergePDFDocuments(
                 ArgumentMatchers.argThat(x -> x.getOptions().getCreateToC() == false), Mockito.anyString());
 
-        sut = new MergeController(mergeServiceMock);
+        sut = new DocumentController(mergeServiceMock);
     }
 
     @Test
