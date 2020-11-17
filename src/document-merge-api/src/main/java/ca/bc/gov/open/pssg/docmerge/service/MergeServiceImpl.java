@@ -81,9 +81,6 @@ public class MergeServiceImpl implements MergeService {
             AssemblerResult jobResult = assemblerClient.invokeDDX(myDDX, inputs, assemblerSpec);
             Map<String, Document> allDocs = jobResult.getDocuments();
 
-            // Retrieve the result PDF document from the Map object
-            Document outDoc;
-
             // Iterate through the map object to retrieve the result PDF document
             resp.setDocument(allDocs.entrySet().stream()
                     .filter(mapEntry -> mapEntry.getKey().equalsIgnoreCase(DocMergeConstants.DDX_OUTPUT_NAME))
