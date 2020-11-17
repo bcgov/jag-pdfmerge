@@ -30,13 +30,19 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+            
+      # Update Env Variables
+      - name: Update Env Variables
+        run: |
+          echo "CC_TEST_REPORTER_ID=e103c74e2b53c51672067da3861f3e6aa412cec1a8819e60dd93bce66c18bed0" >> $GITHUB_ENV
+          echo "JACOCO_SOURCE_PATH=${{github.workspace}}/src/document-merge-api/src/main/java" >> $GITHUB_ENV
       
       #P Push coverage to code climate
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v2.7.4
-        env:
-          CC_TEST_REPORTER_ID: e103c74e2b53c51672067da3861f3e6aa412cec1a8819e60dd93bce66c18bed0
-          JACOCO_SOURCE_PATH: "${{github.workspace}}/src/document-merge-api/src/main/java"
+        #env:
+        #  CC_TEST_REPORTER_ID: e103c74e2b53c51672067da3861f3e6aa412cec1a8819e60dd93bce66c18bed0
+        #  JACOCO_SOURCE_PATH: "${{github.workspace}}/src/document-merge-api/src/main/java"
         with:
           # The report file must be there, otherwise Code Climate won't find it
           coverageCommand: mvn -B verify -P all --file src/pom.xml
