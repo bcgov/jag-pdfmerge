@@ -6,7 +6,7 @@
 
     <groupId>ca.bc.gov.open</groupId>
     <artifactId>document-elf</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.0-SNAPSHOT</version>
     <dependencies>
         <dependency>
             <groupId>org.bitbucket.b_c</groupId>
