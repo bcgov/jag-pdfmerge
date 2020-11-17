@@ -145,7 +145,7 @@ public class DDXUtils {
 	 * @return
 	 * @throws TransformerException
 	 */
-	public static String DDXDocumentToString(Document ddx) throws Exception {
+	public static String dDXDocumentToString(Document ddx) throws Exception {
 
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer;

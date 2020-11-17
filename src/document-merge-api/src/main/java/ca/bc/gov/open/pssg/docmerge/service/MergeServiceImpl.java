@@ -1,12 +1,9 @@
 package ca.bc.gov.open.pssg.docmerge.service;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -59,44 +56,21 @@ public class MergeServiceImpl implements MergeService {
 
             logger.info("Calling mergePDFDocuments...");
 
-            LinkedList<MergeDoc> pageList = new LinkedList<MergeDoc>();
 
             // Sort the document based on placement id in the event they are mixed. lowest to highest
-            Collections.sort(request.getDocuments(), new Comparator<ca.bc.gov.open.pssg.docmerge.model.Document>() {
-                public int compare(ca.bc.gov.open.pssg.docmerge.model.Document d1, ca.bc.gov.open.pssg.docmerge.model.Document d2) {
-                    return d1.getOrder().compareTo(d2.getOrder());
-                }
-            });
+            request.getDocuments().sort(Comparator.comparing(ca.bc.gov.open.pssg.docmerge.model.Document::getOrder));
 
-            // For each document, check if XFA and convert to PDF/A if requested via option.
-            for (ca.bc.gov.open.pssg.docmerge.model.Document doc : request.getDocuments()) {
-
-                byte[] thisDoc = Base64Utils.decode(doc.getData().getBytes());
-
-                if (request.getOptions().getForcePDFAOnLoad() && PDFBoxUtilities.isPDFXfa(thisDoc)) {
-                    logger.info("forcePDFA is on and document, order " + doc.getOrder() + ", is XFA. Converting to PDF/A...");
-
-                    //call PDF/A transformation
-                    thisDoc = createPDFADocument(thisDoc, serviceClientFactory);
-                }
-
-                pageList.add(new MergeDoc(thisDoc));
-                logger.info("Loaded page " + doc.getOrder());
-            }
+            LinkedList<MergeDoc> pageList = request.getDocuments().stream()
+                    .map(doc -> buildMergeDoc(doc, request))
+                    .collect(Collectors.toCollection(LinkedList::new));
 
             // Use DDXUtils to Dynamically generate the DDX file sent to AEM.
             org.w3c.dom.Document aDDx = DDXUtils.createMergeDDX(pageList, request.getOptions().getCreateToC());
-            logger.info("Dynamically generated DDX : " + DDXUtils.DDXDocumentToString(aDDx));
             Document myDDX = DDXUtils.convertDDX(aDDx);
 
             // Create a Map object to store the PDF source documents
-            Map<String, Object> inputs = new HashMap<String, Object>();
-            Iterator<MergeDoc> it = pageList.iterator();
-            while (it.hasNext()) {
-                MergeDoc pageElement = (MergeDoc) it.next();
-                Document pageDocument = new Document(pageElement.getFile());
-                inputs.put(pageElement.getId(), (Object) pageDocument);
-            }
+            Map<String, Object> inputs = pageList.stream()
+                    .collect(Collectors.toMap(MergeDoc::getId, doc -> new Document(doc.getFile())));
 
             // Create an AssemblerOptionsSpec object
             AssemblerOptionSpec assemblerSpec = new AssemblerOptionSpec();
@@ -106,36 +80,52 @@ public class MergeServiceImpl implements MergeService {
             AssemblerResult jobResult = assemblerClient.invokeDDX(myDDX, inputs, assemblerSpec);
             Map<String, Document> allDocs = jobResult.getDocuments();
 
-            // Retrieve the result PDF document from the Map object
-            Document outDoc = null;
-
             // Iterate through the map object to retrieve the result PDF document
-            for (Iterator i = allDocs.entrySet().iterator(); i.hasNext(); ) {
-
-                // Retrieve the Map object’s value
-                Map.Entry e = (Map.Entry) i.next();
-
-                // Get the key name as specified in the DDX document
-                String keyName = (String) e.getKey();
-                if (keyName.equalsIgnoreCase(DocMergeConstants.DDX_OUTPUT_NAME)) {
-
-                    Object o = e.getValue();
-                    outDoc = (Document) o;
-
-                    resp.setDocument(Base64Utils.encodeToString(IOUtils.toByteArray(outDoc.getInputStream())));
-                }
-            }
+            resp.setDocument(allDocs.entrySet().stream()
+                    .filter(mapEntry -> mapEntry.getKey().equalsIgnoreCase(DocMergeConstants.DDX_OUTPUT_NAME))
+                    .map(mapEntry -> buildOutputDocument((Document)mapEntry.getValue()))
+                    .findFirst().get());
 
             resp.setMimeType(DocMergeConstants.PDF_MIME_TYPE);
 
         } catch (Exception e) {
 
-            logger.error("Failure at mergeDocuments. Reason: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Failure at mergeDocuments", e);
             throw new MergeException(e.getMessage(), e);
+
         }
 
         return resp;
+    }
+
+    private MergeDoc buildMergeDoc(ca.bc.gov.open.pssg.docmerge.model.Document doc, DocMergeRequest request) throws RuntimeException {
+
+        byte[] docBytes = Base64Utils.decode(doc.getData().getBytes());
+
+        if (request.getOptions().getForcePDFAOnLoad() && PDFBoxUtilities.isPDFXfa(docBytes)) {
+            logger.info("forcePDFA is on and document, order {}, is XFA. Converting to PDF/A...", doc.getOrder());
+
+            //call PDF/A transformation
+
+            try {
+                docBytes = createPDFADocument(docBytes, serviceClientFactory);
+            } catch (ConversionException | IOException e) {
+               logger.error("Error creating pdf a ", e);
+               throw new RuntimeException(e.getMessage());
+            }
+        }
+
+        logger.info("Loaded page {}", doc.getOrder());
+        return new MergeDoc(docBytes);
+    }
+
+    private String buildOutputDocument(Document document) {
+        try {
+            return Base64Utils.encodeToString(IOUtils.toByteArray(document.getInputStream()));
+        } catch (IOException e) {
+            logger.error("Error creating pdf a ", e);
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     /**
