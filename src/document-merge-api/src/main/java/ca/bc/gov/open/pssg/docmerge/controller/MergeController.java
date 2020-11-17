@@ -1,7 +1,6 @@
 package ca.bc.gov.open.pssg.docmerge.controller;
 
 import javax.validation.Valid;
-import javax.xml.soap.MessageFactory;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
