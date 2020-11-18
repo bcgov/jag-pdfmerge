@@ -1,9 +1,9 @@
 package ca.bc.gov.open.jag.documentutils.model;
 
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import javax.validation.constraints.NotNull;
 
 @JsonPropertyOrder({ "id", "docType", "order", "data" })
 public class Document {
@@ -13,55 +13,34 @@ public class Document {
 	private String id;
 	
 	@NotNull
-	@JsonProperty("docType")
-	private String docType;
-	
-	@NotNull
 	@JsonProperty("order")
-	private Integer order;
+	private int order;
 	
 	@NotNull
 	@JsonProperty("data")
 	private String data;
 
-	@JsonProperty("id")
 	public String getId() {
 		return id;
 	}
 
-	@JsonProperty("id")
 	public void setId(String id) {
 		this.id = id;
 	}
 
-	@JsonProperty("docType")
-	public String getDocType() {
-		return docType;
-	}
-
-	@JsonProperty("docType")
-	public void setDocType(String docType) {
-		this.docType = docType;
-	}
-
-	@JsonProperty("order")
-	public Integer getOrder() {
+	public int getOrder() {
 		return order;
 	}
 
-	@JsonProperty("order")
-	public void setOrder(Integer order) {
+	public void setOrder(int order) {
 		this.order = order;
 	}
 
-	@JsonProperty("data")
 	public String getData() {
 		return data;
 	}
 
-	@JsonProperty("data")
 	public void setData(String data) {
 		this.data = data;
 	}
-
 }
