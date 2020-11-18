@@ -74,13 +74,11 @@ public class DocumentControllerTest {
         options.setCreateToC(true);
         request.setOptions(options);
 
-        ResponseEntity<JSONResponse<DocMergeResponse>> actual = sut.mergeDocumentPost("id", request);
+        ResponseEntity<DocMergeResponse> actual = sut.mergeDocumentPost("id", request);
 
         Assertions.assertEquals(HttpStatus.OK, actual.getStatusCode());
-        Assertions.assertNull(actual.getBody().getError());
-        Assertions.assertEquals("success", actual.getBody().getResp());
-        Assertions.assertEquals("the document", actual.getBody().getData().getDocument());
-        Assertions.assertEquals("test", actual.getBody().getData().getMimeType());
+        Assertions.assertEquals("the document", actual.getBody().getDocument());
+        Assertions.assertEquals("test", actual.getBody().getMimeType());
 
     }
 
@@ -111,11 +109,11 @@ public class DocumentControllerTest {
         options.setCreateToC(false);
         request.setOptions(options);
 
-        ResponseEntity<JSONResponse<DocMergeResponse>> actual = sut.mergeDocumentPost("id", request);
+        ResponseEntity actual = sut.mergeDocumentPost("id", request);
 
         Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, actual.getStatusCode());
-        Assertions.assertEquals(500, actual.getBody().getError().getHttpStatus());
-        Assertions.assertEquals("Request cannot be processed. See logging for correlation id id", actual.getBody().getError().getMessage());
+        Assertions.assertEquals(500, ((JSONResponse<DocMergeResponse>)actual.getBody()).getError().getHttpStatus());
+        Assertions.assertEquals("Request cannot be processed. See logging for correlation id id", ((JSONResponse<DocMergeResponse>)actual.getBody()).getError().getMessage());
 
     }
 
