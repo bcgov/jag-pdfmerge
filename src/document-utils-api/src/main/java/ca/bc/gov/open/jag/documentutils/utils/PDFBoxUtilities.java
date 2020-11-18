@@ -42,7 +42,7 @@ public class PDFBoxUtilities {
 			if ( null != doc.getDocumentCatalog().getAcroForm()) {
 				xfa = doc.getDocumentCatalog().getAcroForm().getXFA();
 			} 
-			isXFA = (null != xfa) ? true : false;
+			return null != xfa;
 		} catch (MergeException | NullPointerException e) {
 			logger.error(e.getMessage());
 		} finally {			
@@ -83,7 +83,7 @@ public class PDFBoxUtilities {
 
 	/**
      * isEncrypted()- determines if PDF is password protected.
-     * @param pddocument
+     * @param pdfFile
      * @return
 	 * @throws MergeException 
      * @throws IOException
