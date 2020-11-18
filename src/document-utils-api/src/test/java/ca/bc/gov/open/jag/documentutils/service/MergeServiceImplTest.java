@@ -1,20 +1,28 @@
 package ca.bc.gov.open.jag.documentutils.service;
 
+import ca.bc.gov.open.jag.documentutils.TestHelpers;
 import ca.bc.gov.open.jag.documentutils.model.DocMergeRequest;
 import ca.bc.gov.open.jag.documentutils.model.DocMergeResponse;
 import ca.bc.gov.open.jag.documentutils.model.Document;
 import ca.bc.gov.open.jag.documentutils.model.Options;
 import ca.bc.gov.open.jag.documentutils.utils.DocMergeConstants;
 import ca.bc.gov.open.jag.documentutils.exception.MergeException;
+import com.adobe.idp.dsc.DSCException;
+import com.adobe.idp.dsc.InvocationRequest;
+import com.adobe.idp.dsc.clientsdk.ServiceClient;
 import com.adobe.idp.dsc.clientsdk.ServiceClientFactory;
+import com.adobe.idp.dsc.impl.InvocationRequestImpl;
+import com.adobe.idp.dsc.impl.InvocationResponseImpl;
 import com.adobe.livecycle.assembler.client.AssemblerResult;
 import com.adobe.livecycle.assembler.client.AssemblerServiceClient;
 import com.adobe.livecycle.assembler.client.OperationException;
+import com.adobe.livecycle.docconverter.client.PDFAConversionResult;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,8 +43,14 @@ public class MergeServiceImplTest {
     @Mock
     private AssemblerResult assemblerResultMock;
 
+    @Mock
+    private InvocationRequest invocationRequestMock;
+
+    @Mock
+    private ServiceClient serviceClientMock;
+
     @BeforeAll
-    public void beforeAll() throws OperationException {
+    public void beforeAll() throws OperationException, DSCException {
 
         MockitoAnnotations.initMocks(this);
 
@@ -49,8 +63,44 @@ public class MergeServiceImplTest {
         documents.put(DocMergeConstants.DDX_OUTPUT_NAME, document);
 
         Mockito.when(assemblerResultMock.getDocuments()).thenReturn(documents);
+        InvocationRequestImpl invocationRequest = new InvocationRequestImpl();
+        InvocationResponseImpl invocationResponse = new InvocationResponseImpl();
+        invocationResponse.setOutputParameter("result", new PDFAConversionResult());
+        Mockito.when(serviceClientMock.invoke(Mockito.any())).thenReturn(invocationResponse);
+        Mockito.when(serviceClientFactoryMock.getServiceClient()).thenReturn(serviceClientMock);
+
+        Mockito.when(serviceClientFactoryMock.createInvocationRequest(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(invocationRequestMock);
+
+
 
         sut = new MergeServiceImpl(serviceClientFactoryMock, assemblerServiceClientMock);
+
+    }
+
+    @Test
+    @DisplayName("ok: should merge documents with xfa")
+    public void withValidXfaDocumentsShouldReturnValidDocuments() throws MergeException, IOException {
+
+        DocMergeRequest docMergeRequest = new DocMergeRequest();
+        List<Document> documents = new ArrayList<>();
+        Document document = new Document();
+        document.setData(TestHelpers.loadTestDataFromFile("RecordOfProceedings_1.5.dat"));
+        document.setId("1");
+        document.setOrder(2);
+        documents.add(document);
+        Document document2 = new Document();
+        document2.setData(PDF_DATA);
+        document2.setId("2");
+        document2.setOrder(1);
+        documents.add(document2);
+        docMergeRequest.setDocuments(documents);
+        Options options = new Options();
+        options.setCreateToC(true);
+        options.setForcePDFAOnLoad(true);
+        docMergeRequest.setOptions(options);
+        DocMergeResponse actual = sut.mergePDFDocuments(docMergeRequest, "id");
+
+        Assertions.assertEquals("dGVzdA==", actual.getDocument());
 
     }
 

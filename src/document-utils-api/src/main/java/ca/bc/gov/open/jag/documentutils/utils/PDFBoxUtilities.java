@@ -42,7 +42,7 @@ public class PDFBoxUtilities {
 			if ( null != doc.getDocumentCatalog().getAcroForm()) {
 				xfa = doc.getDocumentCatalog().getAcroForm().getXFA();
 			} 
-			isXFA = (null != xfa) ? true : false;
+			isXFA = null != xfa;
 		} catch (MergeException | NullPointerException e) {
 			logger.error(e.getMessage());
 		} finally {			
