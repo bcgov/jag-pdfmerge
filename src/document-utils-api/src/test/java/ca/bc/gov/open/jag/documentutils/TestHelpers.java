@@ -15,10 +15,4 @@ public class TestHelpers {
 
     }
 
-    public static File loadFile(String fileName) throws IOException {
-
-        return Files.createFile(Paths.get(MessageFormat.format("./test_files/{0}", fileName))).toFile();
-
-    }
-
 }
