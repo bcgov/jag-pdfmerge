@@ -10,7 +10,15 @@ public class TestHelpers {
     private TestHelpers() {}
 
     public static String loadTestDataFromFile(String fileName) throws IOException {
+
         return new String(Files.readAllBytes(Paths.get(MessageFormat.format("./test_files/{0}", fileName))));
+
+    }
+
+    public static File loadFile(String fileName) throws IOException {
+
+        return Files.createFile(Paths.get(MessageFormat.format("./test_files/{0}", fileName))).toFile();
+
     }
 
 }

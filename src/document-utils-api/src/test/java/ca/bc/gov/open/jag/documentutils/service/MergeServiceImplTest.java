@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.mockito.Mockito.mock;
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MergeServiceImplTest {
 
@@ -50,7 +52,7 @@ public class MergeServiceImplTest {
     private ServiceClient serviceClientMock;
 
     @BeforeAll
-    public void beforeAll() throws OperationException, DSCException {
+    public void beforeAll() throws OperationException, DSCException, IOException {
 
         MockitoAnnotations.initMocks(this);
 
@@ -63,15 +65,16 @@ public class MergeServiceImplTest {
         documents.put(DocMergeConstants.DDX_OUTPUT_NAME, document);
 
         Mockito.when(assemblerResultMock.getDocuments()).thenReturn(documents);
+
         InvocationRequestImpl invocationRequest = new InvocationRequestImpl();
         InvocationResponseImpl invocationResponse = new InvocationResponseImpl();
-        invocationResponse.setOutputParameter("result", new PDFAConversionResult());
+        PDFAConversionResult pdfaConversionResult = new PDFAConversionResult();
+
+        pdfaConversionResult.setPDFADocument(document);
+        invocationResponse.setOutputParameter("result", pdfaConversionResult);
         Mockito.when(serviceClientMock.invoke(Mockito.any())).thenReturn(invocationResponse);
         Mockito.when(serviceClientFactoryMock.getServiceClient()).thenReturn(serviceClientMock);
-
-        Mockito.when(serviceClientFactoryMock.createInvocationRequest(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(invocationRequestMock);
-
-
+        Mockito.when(serviceClientFactoryMock.createInvocationRequest(Mockito.anyString(), Mockito.anyString(), Mockito.anyMap(), Mockito.anyBoolean())).thenReturn(invocationRequest);
 
         sut = new MergeServiceImpl(serviceClientFactoryMock, assemblerServiceClientMock);
 
