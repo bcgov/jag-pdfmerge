@@ -13,24 +13,19 @@ public class DocMergeResponse {
 	@JsonProperty("mimeType")
 	private String mimeType;
 
-	@JsonProperty("document")
 	public String getDocument() {
 		return document;
 	}
 
-	@JsonProperty("document")
 	public void setDocument(String document) {
 		this.document = document;
 	}
 
-	@JsonProperty("mimeType")
 	public String getMimeType() {
 		return mimeType;
 	}
 
-	@JsonProperty("mimeType")
 	public void setMimeType(String mimeType) {
 		this.mimeType = mimeType;
 	}
-
 }

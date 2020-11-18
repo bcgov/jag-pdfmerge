@@ -38,12 +38,12 @@ public class DocumentControllerTest {
         Mockito
                 .doReturn(documentMerged)
                 .when(mergeServiceMock).mergePDFDocuments(
-                ArgumentMatchers.argThat(x -> x.getOptions().getCreateToC() == true), Mockito.anyString());
+                ArgumentMatchers.argThat(x -> x.getOptions().isCreateToC() == true), Mockito.anyString());
 
         Mockito
                 .doThrow(MergeException.class)
                 .when(mergeServiceMock).mergePDFDocuments(
-                ArgumentMatchers.argThat(x -> x.getOptions().getCreateToC() == false), Mockito.anyString());
+                ArgumentMatchers.argThat(x -> x.getOptions().isCreateToC() == false), Mockito.anyString());
 
         sut = new DocumentController(mergeServiceMock);
     }
@@ -59,30 +59,26 @@ public class DocumentControllerTest {
         document1.setOrder(1);
         document1.setId("id1");
         document1.setData("data");
-        document1.setDocType("pdf");
         documents.add(document1);
 
         Document document2 = new Document();
         document2.setOrder(1);
         document2.setId("id1");
         document2.setData("data");
-        document2.setDocType("pdf");
         documents.add(document2);
 
         request.setDocuments(documents);
 
         Options options = new Options();
-        options.setForcePDFAOnLoad("true");
-        options.setCreateToC("true");
+        options.setForcePDFAOnLoad(true);
+        options.setCreateToC(true);
         request.setOptions(options);
 
-        ResponseEntity<JSONResponse<DocMergeResponse>> actual = sut.mergeDocumentPost("id", request);
+        ResponseEntity<DocMergeResponse> actual = sut.mergeDocumentPost("id", request);
 
         Assertions.assertEquals(HttpStatus.OK, actual.getStatusCode());
-        Assertions.assertNull(actual.getBody().getError());
-        Assertions.assertEquals("success", actual.getBody().getResp());
-        Assertions.assertEquals("the document", actual.getBody().getData().getDocument());
-        Assertions.assertEquals("test", actual.getBody().getData().getMimeType());
+        Assertions.assertEquals("the document", actual.getBody().getDocument());
+        Assertions.assertEquals("test", actual.getBody().getMimeType());
 
     }
 
@@ -98,28 +94,26 @@ public class DocumentControllerTest {
         document1.setOrder(1);
         document1.setId("id1");
         document1.setData("data");
-        document1.setDocType("pdf");
         documents.add(document1);
 
         Document document2 = new Document();
         document2.setOrder(1);
         document2.setId("id1");
         document2.setData("not good data");
-        document2.setDocType("pdf");
         documents.add(document2);
 
         request.setDocuments(documents);
 
         Options options = new Options();
-        options.setForcePDFAOnLoad("true");
-        options.setCreateToC("false");
+        options.setForcePDFAOnLoad(true);
+        options.setCreateToC(false);
         request.setOptions(options);
 
-        ResponseEntity<JSONResponse<DocMergeResponse>> actual = sut.mergeDocumentPost("id", request);
+        ResponseEntity actual = sut.mergeDocumentPost("id", request);
 
         Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, actual.getStatusCode());
-        Assertions.assertEquals(500, actual.getBody().getError().getHttpStatus());
-        Assertions.assertEquals("Request cannot be processed. See logging for correlation id id", actual.getBody().getError().getMessage());
+        Assertions.assertEquals(500, ((JSONResponse<DocMergeResponse>)actual.getBody()).getError().getHttpStatus());
+        Assertions.assertEquals("Request cannot be processed. See logging for correlation id id", ((JSONResponse<DocMergeResponse>)actual.getBody()).getError().getMessage());
 
     }
 

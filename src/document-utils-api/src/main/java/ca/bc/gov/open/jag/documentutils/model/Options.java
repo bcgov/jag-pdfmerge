@@ -1,10 +1,9 @@
 package ca.bc.gov.open.jag.documentutils.model;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import javax.validation.constraints.NotNull;
 
 
 /**
@@ -15,37 +14,28 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  */
 @JsonPropertyOrder({ "forcePDFAOnLoad", "createToC" })
 public class Options {
-	
-	@NotNull
-	@Pattern(regexp = "^true$|^false$", message = "forcePDFAOnLoad - allowed input: true or false")
-	@JsonProperty("forcePDFAOnLoad")
-	private String forcePDFAOnLoad;
 
 	@NotNull
-	@Pattern(regexp = "^true$|^false$", message = "createToC - allowed input: true or false")
+	@JsonProperty("forcePDFAOnLoad")
+	private boolean forcePDFAOnLoad;
+
+	@NotNull
 	@JsonProperty("createToC")
-	private String createToC;
+	private boolean createToC;
 
-	@JsonProperty("forcePDFAOnLoad")
-	public boolean getForcePDFAOnLoad() {
-		return Boolean.parseBoolean(forcePDFAOnLoad);
+	public boolean isForcePDFAOnLoad() {
+		return forcePDFAOnLoad;
 	}
 
-	@JsonProperty("forcePDFAOnLoad")
-	public void setForcePDFAOnLoad(String forcePDFAOnLoad) {
+	public void setForcePDFAOnLoad(boolean forcePDFAOnLoad) {
 		this.forcePDFAOnLoad = forcePDFAOnLoad;
 	}
 
-	@JsonProperty("createToC")
-	public boolean getCreateToC() {
-		return Boolean.parseBoolean(createToC);
+	public boolean isCreateToC() {
+		return createToC;
 	}
 
-	@JsonProperty("createToC")
-	public void setCreateToC(String createToC) {
+	public void setCreateToC(boolean createToC) {
 		this.createToC = createToC;
 	}
-	
-	
-	
 }

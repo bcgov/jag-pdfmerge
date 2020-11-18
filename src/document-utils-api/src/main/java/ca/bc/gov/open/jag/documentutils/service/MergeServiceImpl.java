@@ -1,19 +1,13 @@
 package ca.bc.gov.open.jag.documentutils.service;
 
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
-
+import ca.bc.gov.open.jag.documentutils.exception.MergeException;
 import ca.bc.gov.open.jag.documentutils.model.DocMergeRequest;
 import ca.bc.gov.open.jag.documentutils.model.DocMergeResponse;
 import ca.bc.gov.open.jag.documentutils.model.MergeDoc;
 import ca.bc.gov.open.jag.documentutils.utils.DDXUtils;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Base64Utils;
-
+import ca.bc.gov.open.jag.documentutils.utils.DocMergeConstants;
+import ca.bc.gov.open.jag.documentutils.utils.MediaTypes;
+import ca.bc.gov.open.jag.documentutils.utils.PDFBoxUtilities;
 import com.adobe.idp.Document;
 import com.adobe.idp.dsc.clientsdk.ServiceClientFactory;
 import com.adobe.livecycle.assembler.client.AssemblerOptionSpec;
@@ -23,10 +17,17 @@ import com.adobe.livecycle.docconverter.client.ConversionException;
 import com.adobe.livecycle.docconverter.client.DocConverterServiceClient;
 import com.adobe.livecycle.docconverter.client.PDFAConversionOptionSpec;
 import com.adobe.livecycle.docconverter.client.PDFAConversionResult;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Base64Utils;
 
-import ca.bc.gov.open.jag.documentutils.exception.MergeException;
-import ca.bc.gov.open.jag.documentutils.utils.PDFBoxUtilities;
-import ca.bc.gov.open.jag.documentutils.utils.DocMergeConstants;
+import java.io.IOException;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * PDF Merge service.
@@ -64,7 +65,7 @@ public class MergeServiceImpl implements MergeService {
                     .collect(Collectors.toCollection(LinkedList::new));
 
             // Use DDXUtils to Dynamically generate the DDX file sent to AEM.
-            org.w3c.dom.Document aDDx = DDXUtils.createMergeDDX(pageList, request.getOptions().getCreateToC());
+            org.w3c.dom.Document aDDx = DDXUtils.createMergeDDX(pageList, request.getOptions().isCreateToC());
             Document myDDX = DDXUtils.convertDDX(aDDx);
 
             // Create a Map object to store the PDF source documents
@@ -85,7 +86,7 @@ public class MergeServiceImpl implements MergeService {
                     .map(mapEntry -> buildOutputDocument((Document)mapEntry.getValue()))
                     .findFirst().get());
 
-            resp.setMimeType(DocMergeConstants.PDF_MIME_TYPE);
+            resp.setMimeType(MediaTypes.APPLICATION_PDF);
 
         } catch (Exception e) {
 
@@ -101,7 +102,7 @@ public class MergeServiceImpl implements MergeService {
 
         byte[] docBytes = Base64Utils.decode(doc.getData().getBytes());
 
-        if (request.getOptions().getForcePDFAOnLoad() && PDFBoxUtilities.isPDFXfa(docBytes)) {
+        if (request.getOptions().isForcePDFAOnLoad() && PDFBoxUtilities.isPDFXfa(docBytes)) {
             logger.info("forcePDFA is on and document, order {}, is XFA. Converting to PDF/A...", doc.getOrder());
 
             //call PDF/A transformation

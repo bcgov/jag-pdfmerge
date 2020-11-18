@@ -17,12 +17,6 @@ public final class DocMergeConstants {
     
     public static final String NOT_PROCESSED_ERROR = "Request cannot be processed. See logging for correlation id %s";
 	
-	// rest response media type
-	public static final String JSON_CONTENT = "application/json";
-	
-	// mime types
-	public static final String PDF_MIME_TYPE = "application/pdf"; 
-	
 	//DDX related constants
 	public static final String DDX_ELEMENT_PDF = "PDF";
 	public static final String DDX_ELEMENT_DDX = "DDX"; 
@@ -39,7 +33,6 @@ public final class DocMergeConstants {
 	// Doc Merge validation errors
 	public static final String NO_HANDLER_ERROR = "Request URL does not exist";
 	public static final String UNKNOWN_ERROR = "Unexpected error occured";
-	public static final String MISSING_PARAMS_ERROR = "Missing request params";
 	public static final String MISSING_REQUEST_BODY_ERROR = "Required data not found in the request body";
  
 }

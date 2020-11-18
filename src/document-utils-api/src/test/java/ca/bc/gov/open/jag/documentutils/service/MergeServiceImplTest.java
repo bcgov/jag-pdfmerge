@@ -62,20 +62,18 @@ public class MergeServiceImplTest {
         List<Document> documents = new ArrayList<>();
         Document document = new Document();
         document.setData(PDF_DATA);
-        document.setDocType("pdf");
         document.setId("1");
         document.setOrder(2);
         documents.add(document);
         Document document2 = new Document();
         document2.setData(PDF_DATA);
-        document2.setDocType("pdf");
         document2.setId("2");
         document2.setOrder(1);
         documents.add(document2);
         docMergeRequest.setDocuments(documents);
         Options options = new Options();
-        options.setCreateToC("true");
-        options.setForcePDFAOnLoad("true");
+        options.setCreateToC(true);
+        options.setForcePDFAOnLoad(true);
         docMergeRequest.setOptions(options);
         DocMergeResponse actual = sut.mergePDFDocuments(docMergeRequest, "id");
 
