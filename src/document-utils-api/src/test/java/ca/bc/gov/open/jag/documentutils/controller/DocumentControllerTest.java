@@ -56,13 +56,13 @@ public class DocumentControllerTest {
         List<Document> documents = new ArrayList<>();
 
         Document document1 = new Document();
-        document1.setOrder(1);
+        document1.setIndex(1);
         document1.setId("id1");
         document1.setData("data");
         documents.add(document1);
 
         Document document2 = new Document();
-        document2.setOrder(1);
+        document2.setIndex(1);
         document2.setId("id1");
         document2.setData("data");
         documents.add(document2);
@@ -79,41 +79,6 @@ public class DocumentControllerTest {
         Assertions.assertEquals(HttpStatus.OK, actual.getStatusCode());
         Assertions.assertEquals("the document", actual.getBody().getDocument());
         Assertions.assertEquals("test", actual.getBody().getMimeType());
-
-    }
-
-    @Test
-    @DisplayName("500: with ANY exception should return 500")
-    public void itShouldNotMergeWithInvalidDocuments() {
-
-
-        @Valid DocMergeRequest request = new DocMergeRequest();
-        List<Document> documents = new ArrayList<>();
-
-        Document document1 = new Document();
-        document1.setOrder(1);
-        document1.setId("id1");
-        document1.setData("data");
-        documents.add(document1);
-
-        Document document2 = new Document();
-        document2.setOrder(1);
-        document2.setId("id1");
-        document2.setData("not good data");
-        documents.add(document2);
-
-        request.setDocuments(documents);
-
-        Options options = new Options();
-        options.setForcePDFAOnLoad(true);
-        options.setCreateToC(false);
-        request.setOptions(options);
-
-        ResponseEntity actual = sut.mergeDocumentPost("id", request);
-
-        Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, actual.getStatusCode());
-        Assertions.assertEquals(500, ((JSONResponse<DocMergeResponse>)actual.getBody()).getError().getHttpStatus());
-        Assertions.assertEquals("Request cannot be processed. See logging for correlation id id", ((JSONResponse<DocMergeResponse>)actual.getBody()).getError().getMessage());
 
     }
 
