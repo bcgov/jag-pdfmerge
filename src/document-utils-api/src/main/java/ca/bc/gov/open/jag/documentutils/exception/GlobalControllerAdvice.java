@@ -26,9 +26,9 @@ import java.util.Map.Entry;
  * @author shaunmillargov
  */
 @ControllerAdvice
-public class DocMergeExceptionHandler {
+public class GlobalControllerAdvice {
 
-    private final Logger logger = LoggerFactory.getLogger(DocMergeExceptionHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(GlobalControllerAdvice.class);
 
     @ExceptionHandler(MergeException.class)
     public ResponseEntity handleDigitalFormsException(MergeException e, WebRequest request) {
