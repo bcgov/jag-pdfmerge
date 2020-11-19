@@ -1,8 +1,11 @@
 package ca.bc.gov.open.jag.documentutils.controller;
 
 import ca.bc.gov.open.jag.documentutils.api.DocumentController;
-import ca.bc.gov.open.jag.documentutils.model.*;
-import ca.bc.gov.open.jag.documentutils.service.MergeService;
+import ca.bc.gov.open.jag.documentutils.api.models.DocMergeRequest;
+import ca.bc.gov.open.jag.documentutils.api.models.DocMergeResponse;
+import ca.bc.gov.open.jag.documentutils.api.models.Document;
+import ca.bc.gov.open.jag.documentutils.api.models.Options;
+import ca.bc.gov.open.jag.documentutils.adobe.MergeService;
 import ca.bc.gov.open.jag.documentutils.exception.MergeException;
 import org.junit.jupiter.api.*;
 import org.mockito.ArgumentMatchers;
@@ -57,13 +60,11 @@ public class DocumentControllerTest {
 
         Document document1 = new Document();
         document1.setIndex(1);
-        document1.setId("id1");
         document1.setData("data");
         documents.add(document1);
 
         Document document2 = new Document();
         document2.setIndex(1);
-        document2.setId("id1");
         document2.setData("data");
         documents.add(document2);
 

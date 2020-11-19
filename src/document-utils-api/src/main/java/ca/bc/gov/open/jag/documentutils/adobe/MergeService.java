@@ -1,7 +1,7 @@
-package ca.bc.gov.open.jag.documentutils.service;
+package ca.bc.gov.open.jag.documentutils.adobe;
 
-import ca.bc.gov.open.jag.documentutils.model.DocMergeRequest;
-import ca.bc.gov.open.jag.documentutils.model.DocMergeResponse;
+import ca.bc.gov.open.jag.documentutils.api.models.DocMergeRequest;
+import ca.bc.gov.open.jag.documentutils.api.models.DocMergeResponse;
 import ca.bc.gov.open.jag.documentutils.exception.MergeException;
 
 /**

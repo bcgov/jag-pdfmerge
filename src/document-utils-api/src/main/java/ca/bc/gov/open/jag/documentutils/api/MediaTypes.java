@@ -1,4 +1,4 @@
-package ca.bc.gov.open.jag.documentutils.utils;
+package ca.bc.gov.open.jag.documentutils.api;
 
 public class MediaTypes {
 
