@@ -56,13 +56,13 @@ public class DocumentControllerTest {
         List<Document> documents = new ArrayList<>();
 
         Document document1 = new Document();
-        document1.setOrder(1);
+        document1.setIndex(1);
         document1.setId("id1");
         document1.setData("data");
         documents.add(document1);
 
         Document document2 = new Document();
-        document2.setOrder(1);
+        document2.setIndex(1);
         document2.setId("id1");
         document2.setData("data");
         documents.add(document2);
@@ -91,13 +91,13 @@ public class DocumentControllerTest {
         List<Document> documents = new ArrayList<>();
 
         Document document1 = new Document();
-        document1.setOrder(1);
+        document1.setIndex(1);
         document1.setId("id1");
         document1.setData("data");
         documents.add(document1);
 
         Document document2 = new Document();
-        document2.setOrder(1);
+        document2.setIndex(1);
         document2.setId("id1");
         document2.setData("not good data");
         documents.add(document2);

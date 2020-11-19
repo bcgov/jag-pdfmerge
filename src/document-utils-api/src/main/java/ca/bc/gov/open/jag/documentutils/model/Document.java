@@ -13,8 +13,8 @@ public class Document {
 	private String id;
 	
 	@NotNull
-	@JsonProperty("order")
-	private int order;
+	@JsonProperty("index")
+	private int index;
 	
 	@NotNull
 	@JsonProperty("data")
@@ -28,12 +28,12 @@ public class Document {
 		this.id = id;
 	}
 
-	public int getOrder() {
-		return order;
+	public int getIndex() {
+		return index;
 	}
 
-	public void setOrder(int order) {
-		this.order = order;
+	public void setIndex(int index) {
+		this.index = index;
 	}
 
 	public String getData() {

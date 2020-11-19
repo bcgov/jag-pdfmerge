@@ -58,7 +58,7 @@ public class MergeServiceImpl implements MergeService {
 
 
             // Sort the document based on placement id in the event they are mixed. lowest to highest
-            request.getDocuments().sort(Comparator.comparing(ca.bc.gov.open.jag.documentutils.model.Document::getOrder));
+            request.getDocuments().sort(Comparator.comparing(ca.bc.gov.open.jag.documentutils.model.Document::getIndex));
 
             LinkedList<MergeDoc> pageList = request.getDocuments().stream()
                     .map(doc -> buildMergeDoc(doc, request))
@@ -103,7 +103,7 @@ public class MergeServiceImpl implements MergeService {
         byte[] docBytes = Base64Utils.decode(doc.getData().getBytes());
 
         if (request.getOptions().isForcePDFAOnLoad() && PDFBoxUtilities.isPDFXfa(docBytes)) {
-            logger.info("forcePDFA is on and document, order {}, is XFA. Converting to PDF/A...", doc.getOrder());
+            logger.info("forcePDFA is on and document, order {}, is XFA. Converting to PDF/A...", doc.getIndex());
 
             //call PDF/A transformation
 
@@ -115,7 +115,7 @@ public class MergeServiceImpl implements MergeService {
             }
         }
 
-        logger.info("Loaded page {}", doc.getOrder());
+        logger.info("Loaded page {}", doc.getIndex());
         return new MergeDoc(docBytes);
     }
 
