@@ -3,10 +3,8 @@ package ca.bc.gov.open.jag.documentutils.adobe;
 
 /**
  * 
- * Digital Forms Constants. 
+ * Adobe Constants.
  * 
- * @author shaunmillargov
- *
  */
 public final class AdobeKeys {
 	
