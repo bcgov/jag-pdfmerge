@@ -105,8 +105,6 @@ public class MergeServiceImpl implements MergeService {
         if (request.getOptions().isForcePDFAOnLoad() && PDFBoxUtilities.isPDFXfa(docBytes)) {
             logger.info("forcePDFA is on and document, order {}, is XFA. Converting to PDF/A...", doc.getIndex());
 
-            //call PDF/A transformation
-
             try {
                 docBytes = createPDFADocument(docBytes, serviceClientFactory);
             } catch (ConversionException | IOException e) {

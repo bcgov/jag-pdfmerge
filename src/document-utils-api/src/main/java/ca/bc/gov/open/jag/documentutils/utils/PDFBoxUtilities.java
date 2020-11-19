@@ -81,27 +81,4 @@ public class PDFBoxUtilities {
 		
 	}
 
-	/**
-     * isEncrypted()- determines if PDF is password protected.
-     * @param pdfFile
-     * @return
-	 * @throws MergeException 
-     * @throws IOException
-     */
-	public static boolean isEncrypted(byte[] pdfFile) throws MergeException {
-		
-		PDDocument doc =  getPDDocFromBytes(pdfFile);
-
-		if (doc.isEncrypted()) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-  
-	public static int getNumPages(byte[] pdfFile) throws MergeException {
-		int pages = getPDDocFromBytes(pdfFile).getNumberOfPages();
-		return pages;
-	}
-
 }
