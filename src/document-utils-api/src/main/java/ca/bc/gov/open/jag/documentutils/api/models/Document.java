@@ -7,10 +7,6 @@ import javax.validation.constraints.NotNull;
 
 @JsonPropertyOrder({ "id", "docType", "order", "data" })
 public class Document {
-
-	@NotNull
-	@JsonProperty("id")
-	private String id;
 	
 	@NotNull
 	@JsonProperty("index")
@@ -19,14 +15,6 @@ public class Document {
 	@NotNull
 	@JsonProperty("data")
 	private String data;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public int getIndex() {
 		return index;

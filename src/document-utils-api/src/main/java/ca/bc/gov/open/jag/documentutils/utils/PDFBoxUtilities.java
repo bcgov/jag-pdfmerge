@@ -65,18 +65,16 @@ public class PDFBoxUtilities {
 	 * @return
 	 * @throws MergeException
 	 */
-	private static PDDocument getPDDocFromBytes(byte[] pdfFile) throws MergeException {
+	private static PDDocument getPDDocFromBytes(byte[] pdfFile) {
 		
 		ByteArrayInputStream bis = new ByteArrayInputStream(pdfFile);
 			
 		try {
 			return PDDocument.load(bis);
 		} catch (InvalidPasswordException e) {
-			e.printStackTrace();
-			throw new MergeException("Password Protected PDF.");
+			throw new MergeException("Password Protected PDF.", e.getCause());
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new MergeException("File not a PDF.");
+			throw new MergeException("File not a PDF.", e.getCause());
 		}
 		
 	}

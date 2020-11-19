@@ -1,12 +1,12 @@
 package ca.bc.gov.open.jag.documentutils.service;
 
 import ca.bc.gov.open.jag.documentutils.TestHelpers;
+import ca.bc.gov.open.jag.documentutils.adobe.AdobeKeys;
 import ca.bc.gov.open.jag.documentutils.adobe.MergeServiceImpl;
 import ca.bc.gov.open.jag.documentutils.api.models.DocMergeRequest;
 import ca.bc.gov.open.jag.documentutils.api.models.DocMergeResponse;
 import ca.bc.gov.open.jag.documentutils.api.models.Document;
 import ca.bc.gov.open.jag.documentutils.api.models.Options;
-import ca.bc.gov.open.jag.documentutils.adobe.AdobeKeys;
 import ca.bc.gov.open.jag.documentutils.exception.MergeException;
 import com.adobe.idp.dsc.DSCException;
 import com.adobe.idp.dsc.InvocationRequest;
@@ -28,8 +28,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.mockito.Mockito.mock;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MergeServiceImplTest {
@@ -89,12 +87,10 @@ public class MergeServiceImplTest {
         List<Document> documents = new ArrayList<>();
         Document document = new Document();
         document.setData(TestHelpers.loadTestDataFromFile("RecordOfProceedings_1.5.dat"));
-        document.setId("1");
         document.setIndex(2);
         documents.add(document);
         Document document2 = new Document();
         document2.setData(PDF_DATA);
-        document2.setId("2");
         document2.setIndex(1);
         documents.add(document2);
         docMergeRequest.setDocuments(documents);
@@ -116,12 +112,10 @@ public class MergeServiceImplTest {
         List<Document> documents = new ArrayList<>();
         Document document = new Document();
         document.setData(PDF_DATA);
-        document.setId("1");
         document.setIndex(2);
         documents.add(document);
         Document document2 = new Document();
         document2.setData(PDF_DATA);
-        document2.setId("2");
         document2.setIndex(1);
         documents.add(document2);
         docMergeRequest.setDocuments(documents);

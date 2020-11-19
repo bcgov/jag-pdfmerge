@@ -41,7 +41,7 @@ public class GlobalControllerAdvice {
         logger.error("DocMerge Exception occurred", e);
         MDC.clear();
 
-        return new ResponseEntity(new ApiError("MergeException","Unknown exception while trying to merge documents.", e.getMessage(), request.getHeader(Keys.TRANSACTION_ID)), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity(new ApiError("MergeException",e.getMessage(), e.getDetails(), request.getHeader(Keys.TRANSACTION_ID)), HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 

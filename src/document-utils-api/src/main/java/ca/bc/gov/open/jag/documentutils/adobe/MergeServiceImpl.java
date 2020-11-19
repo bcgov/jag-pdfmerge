@@ -1,16 +1,17 @@
 package ca.bc.gov.open.jag.documentutils.adobe;
 
-import ca.bc.gov.open.jag.documentutils.exception.MergeException;
-import ca.bc.gov.open.jag.documentutils.api.models.DocMergeRequest;
-import ca.bc.gov.open.jag.documentutils.api.models.DocMergeResponse;
 import ca.bc.gov.open.jag.documentutils.adobe.models.MergeDoc;
 import ca.bc.gov.open.jag.documentutils.api.MediaTypes;
+import ca.bc.gov.open.jag.documentutils.api.models.DocMergeRequest;
+import ca.bc.gov.open.jag.documentutils.api.models.DocMergeResponse;
+import ca.bc.gov.open.jag.documentutils.exception.MergeException;
 import ca.bc.gov.open.jag.documentutils.utils.PDFBoxUtilities;
 import com.adobe.idp.Document;
 import com.adobe.idp.dsc.clientsdk.ServiceClientFactory;
 import com.adobe.livecycle.assembler.client.AssemblerOptionSpec;
 import com.adobe.livecycle.assembler.client.AssemblerResult;
 import com.adobe.livecycle.assembler.client.AssemblerServiceClient;
+import com.adobe.livecycle.assembler.client.OperationException;
 import com.adobe.livecycle.docconverter.client.ConversionException;
 import com.adobe.livecycle.docconverter.client.DocConverterServiceClient;
 import com.adobe.livecycle.docconverter.client.PDFAConversionOptionSpec;
@@ -21,6 +22,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -46,7 +49,7 @@ public class MergeServiceImpl implements MergeService {
     }
 
     @Override
-    public DocMergeResponse mergePDFDocuments(DocMergeRequest request, String correlationId) throws MergeException {
+    public DocMergeResponse mergePDFDocuments(DocMergeRequest request, String correlationId) {
 
         DocMergeResponse resp = new DocMergeResponse();
 
@@ -86,14 +89,15 @@ public class MergeServiceImpl implements MergeService {
 
             resp.setMimeType(MediaTypes.APPLICATION_PDF);
 
-        } catch (Exception e) {
+            return resp;
 
-            logger.error("Failure at mergeDocuments", e);
-            throw new MergeException(e.getMessage(), e);
+        } catch (TransformerException | OperationException | ParserConfigurationException e) {
+
+            logger.error("Exception while merging documents", e);
+            throw new MergeException("Exception while merging documents", e.getCause());
 
         }
 
-        return resp;
     }
 
     private MergeDoc buildMergeDoc(ca.bc.gov.open.jag.documentutils.api.models.Document doc, DocMergeRequest request) throws RuntimeException {

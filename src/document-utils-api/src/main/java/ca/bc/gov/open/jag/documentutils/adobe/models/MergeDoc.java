@@ -13,8 +13,6 @@ public class MergeDoc {
 	
 	private String id; 
 	private byte[] file;
-	private String errorCd = null;
-	private String errorMsg = null;
 
 	public MergeDoc(byte[] file) {
 		UUID uniqueKey = UUID.randomUUID();
@@ -28,22 +26,6 @@ public class MergeDoc {
 	
 	public byte[] getFile() {
 		return file;
-	}
-	
-	public String getErrorCd() {
-		return errorCd;
-	}
-
-	public void setErrorCd(String errorCd) {
-		this.errorCd = errorCd;
-	}
-
-	public String getErrorMsg() {
-		return errorMsg;
-	}
-
-	public void setErrorMsg(String errorMsg) {
-		this.errorMsg = errorMsg;
 	}
 
 }
