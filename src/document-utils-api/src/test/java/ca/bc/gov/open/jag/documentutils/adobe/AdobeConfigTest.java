@@ -13,9 +13,9 @@ public class AdobeConfigTest {
 
     ApplicationContextRunner context = new ApplicationContextRunner()
             .withPropertyValues(
-                    "docmerge.aem-endpoint=localhost",
-                    "docmerge.aem-user=user",
-                    "docmerge.aem-password=pwd"
+                    "aem.endpoint=localhost",
+                    "aem.username=user",
+                    "aem.password=pwd"
             )
             .withUserConfiguration(AdobeConfig.class);
 
