@@ -1,6 +1,5 @@
 package ca.bc.gov.open.jag.documentutils.adobe;
 
-import ca.bc.gov.open.jag.documentutils.utils.DocMergeConstants;
 import com.adobe.idp.dsc.clientsdk.ServiceClientFactory;
 import com.adobe.idp.dsc.clientsdk.ServiceClientFactoryProperties;
 import com.adobe.livecycle.assembler.client.AssemblerServiceClient;
@@ -26,7 +25,7 @@ public class AdobeConfig {
         Properties connectionProps = new Properties();
         connectionProps.setProperty(ServiceClientFactoryProperties.DSC_DEFAULT_SOAP_ENDPOINT, aemProperties.getEndpoint());
         connectionProps.setProperty(ServiceClientFactoryProperties.DSC_TRANSPORT_PROTOCOL, ServiceClientFactoryProperties.DSC_SOAP_PROTOCOL);
-        connectionProps.setProperty(ServiceClientFactoryProperties.DSC_SERVER_TYPE, DocMergeConstants.DSC_SERVER_TYPE_JBOSS);
+        connectionProps.setProperty(ServiceClientFactoryProperties.DSC_SERVER_TYPE, AdobeKeys.DSC_SERVER_TYPE_JBOSS);
         connectionProps.setProperty(ServiceClientFactoryProperties.DSC_CREDENTIAL_USERNAME, aemProperties.getUsername());
         connectionProps.setProperty(ServiceClientFactoryProperties.DSC_CREDENTIAL_PASSWORD, aemProperties.getPassword());
 

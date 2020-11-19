@@ -1,8 +1,11 @@
 package ca.bc.gov.open.jag.documentutils.controller;
 
 import ca.bc.gov.open.jag.documentutils.api.DocumentController;
-import ca.bc.gov.open.jag.documentutils.model.*;
-import ca.bc.gov.open.jag.documentutils.service.MergeService;
+import ca.bc.gov.open.jag.documentutils.api.models.DocMergeRequest;
+import ca.bc.gov.open.jag.documentutils.api.models.DocMergeResponse;
+import ca.bc.gov.open.jag.documentutils.api.models.Document;
+import ca.bc.gov.open.jag.documentutils.api.models.Options;
+import ca.bc.gov.open.jag.documentutils.adobe.MergeService;
 import ca.bc.gov.open.jag.documentutils.exception.MergeException;
 import org.junit.jupiter.api.*;
 import org.mockito.ArgumentMatchers;

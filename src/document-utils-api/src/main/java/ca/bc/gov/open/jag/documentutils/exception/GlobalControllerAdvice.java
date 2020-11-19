@@ -1,8 +1,7 @@
 package ca.bc.gov.open.jag.documentutils.exception;
 
 import ca.bc.gov.open.jag.documentutils.Keys;
-import ca.bc.gov.open.jag.documentutils.model.ApiError;
-import ca.bc.gov.open.jag.documentutils.utils.DocMergeConstants;
+import ca.bc.gov.open.jag.documentutils.api.models.ApiError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -30,6 +29,12 @@ public class GlobalControllerAdvice {
 
     private final Logger logger = LoggerFactory.getLogger(GlobalControllerAdvice.class);
 
+    // Doc Merge validation errors
+    private static String NO_HANDLER_ERROR = "Request URL does not exist";
+    private static String UNKNOWN_ERROR = "Unexpected error occured";
+    private static String MISSING_REQUEST_BODY_ERROR = "Required data not found in the request body";
+
+
     @ExceptionHandler(MergeException.class)
     public ResponseEntity handleDigitalFormsException(MergeException e, WebRequest request) {
 
@@ -44,21 +49,21 @@ public class GlobalControllerAdvice {
     public ResponseEntity handleNoHandlerException(NoHandlerFoundException e, WebRequest request) {
         logger.error("No Handler Found Exception occurred", e);
         MDC.clear();
-        return new ResponseEntity(new ApiError("NO_HANDLER_ERROR","Unknown exception while trying to merge documents.", DocMergeConstants.NO_HANDLER_ERROR, request.getHeader(Keys.TRANSACTION_ID)), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity(new ApiError("NO_HANDLER_ERROR","Unknown exception while trying to merge documents.", NO_HANDLER_ERROR, request.getHeader(Keys.TRANSACTION_ID)), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity handleHttpMessageNotReadableException(HttpMessageNotReadableException e, WebRequest request) {
         logger.error("Http Message Not Readable Exception occurred", e);
         MDC.clear();
-        return new ResponseEntity(new ApiError("MISSING_REQUEST_BODY_ERROR","Invalid payload.", DocMergeConstants.MISSING_REQUEST_BODY_ERROR, request.getHeader(Keys.TRANSACTION_ID)), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity(new ApiError("MISSING_REQUEST_BODY_ERROR","Invalid payload.", MISSING_REQUEST_BODY_ERROR, request.getHeader(Keys.TRANSACTION_ID)), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity handleDefaultException(Exception e, WebRequest request) {
         logger.error("Exception occurred", e);
         MDC.clear();
-        return new ResponseEntity(new ApiError("UNKNOWN_ERROR","Unknown exception while trying to merge documents.", DocMergeConstants.UNKNOWN_ERROR, request.getHeader(Keys.TRANSACTION_ID)), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity(new ApiError("UNKNOWN_ERROR","Unknown exception while trying to merge documents.", UNKNOWN_ERROR, request.getHeader(Keys.TRANSACTION_ID)), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

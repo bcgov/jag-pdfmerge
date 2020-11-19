@@ -1,11 +1,10 @@
-package ca.bc.gov.open.jag.documentutils.model;
-
-import java.util.List;
-
-import javax.validation.Valid;
+package ca.bc.gov.open.jag.documentutils.api.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import javax.validation.Valid;
+import java.util.List;
 
 
 @JsonPropertyOrder({ "options", "documents" })

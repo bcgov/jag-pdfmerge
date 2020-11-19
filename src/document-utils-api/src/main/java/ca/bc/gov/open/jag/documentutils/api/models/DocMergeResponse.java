@@ -1,4 +1,4 @@
-package ca.bc.gov.open.jag.documentutils.model;
+package ca.bc.gov.open.jag.documentutils.api.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

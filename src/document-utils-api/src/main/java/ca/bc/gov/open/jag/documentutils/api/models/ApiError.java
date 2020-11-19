@@ -1,4 +1,4 @@
-package ca.bc.gov.open.jag.documentutils.model;
+package ca.bc.gov.open.jag.documentutils.api.models;
 
 public class ApiError {
 

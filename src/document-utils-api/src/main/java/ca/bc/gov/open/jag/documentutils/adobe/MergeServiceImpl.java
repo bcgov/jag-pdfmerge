@@ -1,12 +1,10 @@
-package ca.bc.gov.open.jag.documentutils.service;
+package ca.bc.gov.open.jag.documentutils.adobe;
 
 import ca.bc.gov.open.jag.documentutils.exception.MergeException;
-import ca.bc.gov.open.jag.documentutils.model.DocMergeRequest;
-import ca.bc.gov.open.jag.documentutils.model.DocMergeResponse;
-import ca.bc.gov.open.jag.documentutils.model.MergeDoc;
-import ca.bc.gov.open.jag.documentutils.utils.DDXUtils;
-import ca.bc.gov.open.jag.documentutils.utils.DocMergeConstants;
-import ca.bc.gov.open.jag.documentutils.utils.MediaTypes;
+import ca.bc.gov.open.jag.documentutils.api.models.DocMergeRequest;
+import ca.bc.gov.open.jag.documentutils.api.models.DocMergeResponse;
+import ca.bc.gov.open.jag.documentutils.adobe.models.MergeDoc;
+import ca.bc.gov.open.jag.documentutils.api.MediaTypes;
 import ca.bc.gov.open.jag.documentutils.utils.PDFBoxUtilities;
 import com.adobe.idp.Document;
 import com.adobe.idp.dsc.clientsdk.ServiceClientFactory;
@@ -58,7 +56,7 @@ public class MergeServiceImpl implements MergeService {
 
 
             // Sort the document based on placement id in the event they are mixed. lowest to highest
-            request.getDocuments().sort(Comparator.comparing(ca.bc.gov.open.jag.documentutils.model.Document::getIndex));
+            request.getDocuments().sort(Comparator.comparing(ca.bc.gov.open.jag.documentutils.api.models.Document::getIndex));
 
             LinkedList<MergeDoc> pageList = request.getDocuments().stream()
                     .map(doc -> buildMergeDoc(doc, request))
@@ -82,7 +80,7 @@ public class MergeServiceImpl implements MergeService {
 
             // Iterate through the map object to retrieve the result PDF document
             resp.setDocument(allDocs.entrySet().stream()
-                    .filter(mapEntry -> mapEntry.getKey().equalsIgnoreCase(DocMergeConstants.DDX_OUTPUT_NAME))
+                    .filter(mapEntry -> mapEntry.getKey().equalsIgnoreCase(AdobeKeys.DDX_OUTPUT_NAME))
                     .map(mapEntry -> buildOutputDocument((Document)mapEntry.getValue()))
                     .findFirst().get());
 
@@ -98,7 +96,7 @@ public class MergeServiceImpl implements MergeService {
         return resp;
     }
 
-    private MergeDoc buildMergeDoc(ca.bc.gov.open.jag.documentutils.model.Document doc, DocMergeRequest request) throws RuntimeException {
+    private MergeDoc buildMergeDoc(ca.bc.gov.open.jag.documentutils.api.models.Document doc, DocMergeRequest request) throws RuntimeException {
 
         byte[] docBytes = Base64Utils.decode(doc.getData().getBytes());
 

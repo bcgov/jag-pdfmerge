@@ -1,6 +1,6 @@
-package ca.bc.gov.open.jag.documentutils.utils;
+package ca.bc.gov.open.jag.documentutils.adobe;
 
-import ca.bc.gov.open.jag.documentutils.model.MergeDoc;
+import ca.bc.gov.open.jag.documentutils.adobe.models.MergeDoc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -48,13 +48,13 @@ public class DDXUtils {
 			document = builder.newDocument();
 			
 			// Create the root element and append it to the XML DOM
-			Element root = (Element) document.createElement(DocMergeConstants.DDX_ELEMENT_DDX);
-			root.setAttribute(DocMergeConstants.DDX_NAMESPACE_ATTRIBUTE, DocMergeConstants.DDX_NAMESPACE);
+			Element root = (Element) document.createElement(AdobeKeys.DDX_ELEMENT_DDX);
+			root.setAttribute(AdobeKeys.DDX_NAMESPACE_ATTRIBUTE, AdobeKeys.DDX_NAMESPACE);
 			document.appendChild(root);
 			
 			// Create the output element
-			Element PDFs = (Element) document.createElement(DocMergeConstants.DDX_ELEMENT_PDF);
-			PDFs.setAttribute(DocMergeConstants.DDX_OUTPUT_ATTRIBUTE, DocMergeConstants.DDX_OUTPUT_NAME);
+			Element PDFs = (Element) document.createElement(AdobeKeys.DDX_ELEMENT_PDF);
+			PDFs.setAttribute(AdobeKeys.DDX_OUTPUT_ATTRIBUTE, AdobeKeys.DDX_OUTPUT_NAME);
 			root.appendChild(PDFs);
 			
 			// Add ToC?
@@ -67,8 +67,8 @@ public class DDXUtils {
 			
 			// Add each pageId element to the DDX
 			for (int i = 0; i < pageList.size(); i++) {
-				Element PDF = (Element) document.createElement(DocMergeConstants.DDX_ELEMENT_PDF);
-				PDF.setAttribute(DocMergeConstants.DDX_SOURCE_ATTRIBUTE, pageList.get(i).getId());
+				Element PDF = (Element) document.createElement(AdobeKeys.DDX_ELEMENT_PDF);
+				PDF.setAttribute(AdobeKeys.DDX_SOURCE_ATTRIBUTE, pageList.get(i).getId());
 				if (addToC) {
 					PDF.setAttribute("bookmarkTitle", "Document " + (i + 1)); 
 					PDF.setAttribute("includeInTOC", "true");

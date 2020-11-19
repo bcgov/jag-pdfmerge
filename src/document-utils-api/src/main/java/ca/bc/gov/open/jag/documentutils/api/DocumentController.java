@@ -1,13 +1,14 @@
 package ca.bc.gov.open.jag.documentutils.api;
 
-import ca.bc.gov.open.jag.documentutils.model.DocMergeRequest;
-import ca.bc.gov.open.jag.documentutils.model.DocMergeResponse;
-import ca.bc.gov.open.jag.documentutils.service.MergeService;
-import ca.bc.gov.open.jag.documentutils.utils.MediaTypes;
+import ca.bc.gov.open.jag.documentutils.Keys;
+import ca.bc.gov.open.jag.documentutils.api.models.DocMergeRequest;
+import ca.bc.gov.open.jag.documentutils.api.models.DocMergeResponse;
+import ca.bc.gov.open.jag.documentutils.adobe.MergeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -46,9 +47,13 @@ public class DocumentController {
 		
 		logger.info("Starting merge process...");
 
-		return ResponseEntity.ok(mergeService.mergePDFDocuments(request, transactionId));
-			
+		MDC.put(Keys.TRANSACTION_ID, transactionId);
 
+		ResponseEntity result = ResponseEntity.ok(mergeService.mergePDFDocuments(request, transactionId));
+
+		MDC.remove(Keys.TRANSACTION_ID);
+
+		return result;
 
 	}
 
