@@ -90,7 +90,6 @@ public class DDXServiceImplTest {
     @DisplayName("ok: should convert to DDX")
     public void shouldConvertToDDX() throws ParserConfigurationException, TransformerConfigurationException {
 
-
         Mockito.when(documentBuilderFactoryMock.newDocumentBuilder()).thenReturn(documentBuilderMock);
         Mockito.when(transformerFactoryMock.newTransformer()).thenReturn(transformerMock);
 
