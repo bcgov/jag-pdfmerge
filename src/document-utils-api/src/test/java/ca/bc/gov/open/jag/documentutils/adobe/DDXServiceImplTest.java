@@ -93,7 +93,6 @@ public class DDXServiceImplTest {
         Mockito.when(documentBuilderFactoryMock.newDocumentBuilder()).thenReturn(documentBuilderMock);
         Mockito.when(transformerFactoryMock.newTransformer()).thenReturn(transformerMock);
 
-
         LinkedList<MergeDoc> pageList = new LinkedList<>();
         MergeDoc mergeDoc = new MergeDoc("test".getBytes());
         pageList.add(mergeDoc);
