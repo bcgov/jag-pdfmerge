@@ -1,6 +1,7 @@
 package ca.bc.gov.open.jag.documentutils.adobe;
 
 import ca.bc.gov.open.jag.documentutils.adobe.models.MergeDoc;
+import ca.bc.gov.open.jag.documentutils.exception.DocumentParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -23,9 +24,16 @@ import java.util.LinkedList;
  *
  * @author shaunmillargov
  */
-public class DDXUtils {
+public class DDXServiceImpl implements DDXService {
 
-    private final static Logger logger = LoggerFactory.getLogger(DDXUtils.class);
+    private final static Logger logger = LoggerFactory.getLogger(DDXServiceImpl.class);
+
+
+    private final DocumentBuilderFactory documentBuilderFactory;
+
+    public DDXServiceImpl(DocumentBuilderFactory documentBuilderFactory) {
+        this.documentBuilderFactory = documentBuilderFactory;
+    }
 
     /**
      * Creates a Merge DDX document for Assembler using an org.w3c.dom.Document object
@@ -33,14 +41,20 @@ public class DDXUtils {
      * @return
      * @throws Exception
      */
-    public static Document createMergeDDX(LinkedList<MergeDoc> pageList, boolean addToC) throws ParserConfigurationException {
-
-        // Create DocumentBuilderFactory and DocumentBuilder objects
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
+    @Override
+    public Document createMergeDDX(LinkedList<MergeDoc> pageList, boolean addToC)  {
 
         // Create a new Document object
-        Document document = builder.newDocument();
+        DocumentBuilder documentBuilder = null;
+        try {
+            documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+
+            logger.error("Error Creating document Builder", e);
+            throw new DocumentParserException("Error Creating document Builder", e);
+
+        }
+        Document document = documentBuilder.newDocument();
 
         // Create the root element and append it to the XML DOM
         Element root = (Element) document.createElement(AdobeKeys.DDX_ELEMENT_DDX);
@@ -81,20 +95,26 @@ public class DDXUtils {
      * @param ddx
      * @return
      */
-    public static com.adobe.idp.Document convertDDX(Document ddx) throws TransformerException {
+    @Override
+    public com.adobe.idp.Document convertDDX(Document ddx) {
 
-        TransformerFactory transFact = TransformerFactory.newInstance();
-        Transformer transForm = transFact.newTransformer();
+        try {
+            TransformerFactory transFact = TransformerFactory.newInstance();
+            Transformer transForm = transFact.newTransformer();
 
-        ByteArrayOutputStream myOutStream = new ByteArrayOutputStream();
-        javax.xml.transform.dom.DOMSource myInput = new DOMSource(ddx);
-        javax.xml.transform.stream.StreamResult myOutput = new StreamResult(myOutStream);
+            ByteArrayOutputStream myOutStream = new ByteArrayOutputStream();
+            javax.xml.transform.dom.DOMSource myInput = new DOMSource(ddx);
+            javax.xml.transform.stream.StreamResult myOutput = new StreamResult(myOutStream);
 
-        transForm.transform(myInput, myOutput);
+            transForm.transform(myInput, myOutput);
 
-        byte[] byteArray = myOutStream.toByteArray();
+            byte[] byteArray = myOutStream.toByteArray();
 
-        return new com.adobe.idp.Document(byteArray);
+            return new com.adobe.idp.Document(byteArray);
+        } catch (TransformerException e) {
+            logger.error("Error Creating document Builder", e);
+            throw new DocumentParserException("Error converting document to DDX", e);
+        }
 
     }
 

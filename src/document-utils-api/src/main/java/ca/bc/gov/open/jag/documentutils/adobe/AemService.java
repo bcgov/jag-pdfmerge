@@ -7,11 +7,10 @@ import ca.bc.gov.open.jag.documentutils.exception.MergeException;
 /**
  * 
  * PDF Merging Service Interface 
- * 
- * @author shaunmillargov
+ *
  *
  */
-public interface MergeService {
+public interface AemService {
 
 	public DocMergeResponse mergePDFDocuments(DocMergeRequest request, String correlationId) throws MergeException;
 	

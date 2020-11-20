@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.util.Properties;
 
 @Configuration
@@ -35,6 +36,12 @@ public class AdobeConfig {
     @Bean
     public AssemblerServiceClient assemblerClient(ServiceClientFactory serviceClientFactory) {
         return new AssemblerServiceClient(serviceClientFactory);
+    }
+
+    @Bean
+    public DocumentBuilderFactory documentBuilderFactory() {
+        // Create DocumentBuilderFactory and DocumentBuilder objects
+        return DocumentBuilderFactory.newInstance();
     }
 
 }

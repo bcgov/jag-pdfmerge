@@ -24,8 +24,6 @@ public class MergeDoc {
 		return id;
 	}
 	
-	public byte[] getFile() {
-		return file;
-	}
+	public byte[] getFile() { return file; }
 
 }
