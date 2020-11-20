@@ -1,5 +1,8 @@
 package ca.bc.gov.open.jag.documentutils.api.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ApiError {
 
     private String error;
@@ -10,7 +13,12 @@ public class ApiError {
 
     private String transactionId;
 
-    public ApiError(String error, String message, String detail, String transactionId) {
+    @JsonCreator
+    public ApiError(
+            @JsonProperty("error") String error,
+            @JsonProperty("message") String message,
+            @JsonProperty("detail") String detail,
+            @JsonProperty("transactionId") String transactionId) {
         this.error = error;
         this.message = message;
         this.detail = detail;
@@ -21,32 +29,16 @@ public class ApiError {
         return error;
     }
 
-    public void setError(String error) {
-        this.error = error;
-    }
-
     public String getMessage() {
         return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public String getDetail() {
         return detail;
     }
 
-    public void setDetail(String detail) {
-        this.detail = detail;
-    }
-
     public String getTransactionId() {
         return transactionId;
-    }
-
-    public void setTransactionId(String transactionId) {
-        this.transactionId = transactionId;
     }
 
 }

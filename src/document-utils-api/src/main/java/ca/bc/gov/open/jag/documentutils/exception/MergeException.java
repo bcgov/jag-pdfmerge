@@ -13,10 +13,6 @@ public class MergeException extends RuntimeException {
 
 	private String details;
 
-	public MergeException(String message) {
-		super(message);
-	}
-
 	public MergeException(String message, Throwable cause) {
 		super(message, cause);
 		this.details = cause.getMessage();
