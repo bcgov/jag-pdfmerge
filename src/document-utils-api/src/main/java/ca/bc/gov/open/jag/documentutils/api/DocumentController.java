@@ -3,7 +3,7 @@ package ca.bc.gov.open.jag.documentutils.api;
 import ca.bc.gov.open.jag.documentutils.Keys;
 import ca.bc.gov.open.jag.documentutils.api.models.DocMergeRequest;
 import ca.bc.gov.open.jag.documentutils.api.models.DocMergeResponse;
-import ca.bc.gov.open.jag.documentutils.adobe.MergeService;
+import ca.bc.gov.open.jag.documentutils.adobe.AemService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -29,12 +29,12 @@ import javax.validation.Valid;
 @Api(tags = "Document Api")
 public class DocumentController {
 
-	private final MergeService mergeService;
+	private final AemService aemService;
 	
 	private final Logger logger = LoggerFactory.getLogger(DocumentController.class);
 
-	public DocumentController(MergeService mergeService) {
-		this.mergeService = mergeService;
+	public DocumentController(AemService aemService) {
+		this.aemService = aemService;
 	}
 
 	@ApiOperation("Merge a collection of PDF Document")
@@ -49,7 +49,7 @@ public class DocumentController {
 
 		MDC.put(Keys.TRANSACTION_ID, transactionId);
 
-		ResponseEntity result = ResponseEntity.ok(mergeService.mergePDFDocuments(request, transactionId));
+		ResponseEntity result = ResponseEntity.ok(aemService.mergePDFDocuments(request, transactionId));
 
 		MDC.remove(Keys.TRANSACTION_ID);
 
