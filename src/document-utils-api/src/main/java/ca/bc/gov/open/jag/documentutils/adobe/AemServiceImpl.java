@@ -46,7 +46,8 @@ public class AemServiceImpl implements AemService {
     public AemServiceImpl(
             ServiceClientFactory serviceClientFactory,
             AssemblerServiceClient assemblerClient,
-            DocConverterServiceClient docConverterServiceClient, DDXService ddxService) {
+            DocConverterServiceClient docConverterServiceClient,
+            DDXService ddxService) {
         this.serviceClientFactory = serviceClientFactory;
         this.assemblerClient = assemblerClient;
         this.docConverterServiceClient = docConverterServiceClient;
@@ -119,7 +120,7 @@ public class AemServiceImpl implements AemService {
 
         if (request.getOptions().isForcePDFAOnLoad() && PDFBoxUtilities.isPDFXfa(docBytes)) {
             logger.info("forcePDFA is on and document, order {}, is XFA. Converting to PDF/A...", doc.getIndex());
-            return new MergeDoc(createPDFADocument(docBytes, serviceClientFactory));
+            return new MergeDoc(createPDFADocument(docBytes));
         }
 
         logger.info("Loaded page {}", doc.getIndex());
@@ -144,7 +145,7 @@ public class AemServiceImpl implements AemService {
      * @throws IOException
      */
 
-    private byte[] createPDFADocument(byte[] inputFile, ServiceClientFactory factory) {
+    private byte[] createPDFADocument(byte[] inputFile) {
 
         Document inDoc = new Document(inputFile);
 

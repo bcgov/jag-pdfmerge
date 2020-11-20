@@ -4,6 +4,7 @@ import ca.bc.gov.open.jag.documentutils.adobe.models.MergeDoc;
 import ca.bc.gov.open.jag.documentutils.exception.DocumentParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -24,15 +25,18 @@ import java.util.LinkedList;
  *
  * @author shaunmillargov
  */
+@Service
 public class DDXServiceImpl implements DDXService {
 
     private final static Logger logger = LoggerFactory.getLogger(DDXServiceImpl.class);
 
 
     private final DocumentBuilderFactory documentBuilderFactory;
+    private final TransformerFactory transformerFactory;
 
-    public DDXServiceImpl(DocumentBuilderFactory documentBuilderFactory) {
+    public DDXServiceImpl(DocumentBuilderFactory documentBuilderFactory, TransformerFactory transformerFactory) {
         this.documentBuilderFactory = documentBuilderFactory;
+        this.transformerFactory = transformerFactory;
     }
 
     /**
@@ -99,8 +103,7 @@ public class DDXServiceImpl implements DDXService {
     public com.adobe.idp.Document convertDDX(Document ddx) {
 
         try {
-            TransformerFactory transFact = TransformerFactory.newInstance();
-            Transformer transForm = transFact.newTransformer();
+            Transformer transForm = this.transformerFactory.newTransformer();
 
             ByteArrayOutputStream myOutStream = new ByteArrayOutputStream();
             javax.xml.transform.dom.DOMSource myInput = new DOMSource(ddx);
