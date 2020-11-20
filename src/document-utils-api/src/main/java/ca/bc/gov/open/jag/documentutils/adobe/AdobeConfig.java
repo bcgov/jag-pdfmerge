@@ -3,11 +3,13 @@ package ca.bc.gov.open.jag.documentutils.adobe;
 import com.adobe.idp.dsc.clientsdk.ServiceClientFactory;
 import com.adobe.idp.dsc.clientsdk.ServiceClientFactoryProperties;
 import com.adobe.livecycle.assembler.client.AssemblerServiceClient;
+import com.adobe.livecycle.docconverter.client.DocConverterServiceClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.TransformerFactory;
 import java.util.Properties;
 
 @Configuration
@@ -39,9 +41,19 @@ public class AdobeConfig {
     }
 
     @Bean
+    public DocConverterServiceClient docConverterServiceClient(ServiceClientFactory serviceClientFactory) {
+        return new DocConverterServiceClient(serviceClientFactory);
+    }
+
+    @Bean
     public DocumentBuilderFactory documentBuilderFactory() {
         // Create DocumentBuilderFactory and DocumentBuilder objects
         return DocumentBuilderFactory.newInstance();
+    }
+
+    @Bean
+    public TransformerFactory transformerFactory() {
+        return TransformerFactory.newInstance();
     }
 
 }

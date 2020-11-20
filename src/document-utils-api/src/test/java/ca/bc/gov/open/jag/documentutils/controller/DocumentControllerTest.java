@@ -28,8 +28,8 @@ public class DocumentControllerTest {
     @Mock
     private AemService aemServiceMock;
 
-    @BeforeAll
-    public void beforeAll() throws MergeException {
+    @BeforeEach
+    public void beforeEach() throws MergeException {
 
         MockitoAnnotations.initMocks(this);
 

@@ -53,8 +53,10 @@ public class AemServiceImplTest {
     @Mock
     private DocConverterServiceClient docConverterServiceClientMock;
 
-    @BeforeAll
-    public void beforeAll() throws OperationException, DSCException, IOException, ConversionException {
+    private PDFAConversionResult pdfaConversionResult;
+
+    @BeforeEach
+    public void beforeEach() throws OperationException, DSCException, IOException, ConversionException {
 
         MockitoAnnotations.initMocks(this);
 
@@ -77,8 +79,8 @@ public class AemServiceImplTest {
 
         InvocationRequestImpl invocationRequest = new InvocationRequestImpl();
         InvocationResponseImpl invocationResponse = new InvocationResponseImpl();
-        PDFAConversionResult pdfaConversionResult = new PDFAConversionResult();
 
+        pdfaConversionResult = new PDFAConversionResult();
         pdfaConversionResult.setPDFADocument(document);
         invocationResponse.setOutputParameter("result", pdfaConversionResult);
 
@@ -86,15 +88,15 @@ public class AemServiceImplTest {
         Mockito.when(serviceClientFactoryMock.getServiceClient()).thenReturn(serviceClientMock);
         Mockito.when(serviceClientFactoryMock.createInvocationRequest(Mockito.anyString(), Mockito.anyString(), Mockito.anyMap(), Mockito.anyBoolean())).thenReturn(invocationRequest);
 
-        Mockito.when(docConverterServiceClientMock.toPDFA(Mockito.any(), Mockito.any())).thenReturn(pdfaConversionResult);
-
         sut = new AemServiceImpl(serviceClientFactoryMock, assemblerServiceClientMock, docConverterServiceClientMock, ddxServiceMock);
 
     }
 
     @Test
     @DisplayName("ok: should merge documents with xfa")
-    public void withValidXfaDocumentsShouldReturnValidDocuments() throws MergeException, IOException {
+    public void withValidXfaDocumentsShouldReturnValidDocuments() throws IOException, ConversionException {
+
+        Mockito.when(docConverterServiceClientMock.toPDFA(Mockito.any(), Mockito.any())).thenReturn(pdfaConversionResult);
 
         DocMergeRequest docMergeRequest = new DocMergeRequest();
         List<Document> documents = new ArrayList<>();
@@ -119,7 +121,7 @@ public class AemServiceImplTest {
 
     @Test
     @DisplayName("ok: should merge documents")
-    public void withValidDocumentsShouldReturnValidDocuments() throws MergeException {
+    public void withValidDocumentsShouldReturnValidDocuments() {
 
         DocMergeRequest docMergeRequest = new DocMergeRequest();
         List<Document> documents = new ArrayList<>();
@@ -144,7 +146,7 @@ public class AemServiceImplTest {
 
     @Test
     @DisplayName("Exception: if OperationException then it should Rethrow a MergeException")
-    public void withOperationExceptionShouldRethrowMergeException() throws MergeException {
+    public void withOperationExceptionShouldRethrowMergeException() {
 
         DocMergeRequest docMergeRequest = new DocMergeRequest();
         List<Document> documents = new ArrayList<>();
@@ -165,6 +167,33 @@ public class AemServiceImplTest {
         options.setCreateToC(true);
         options.setForcePDFAOnLoad(true);
         docMergeRequest.setOptions(options);
+        Assertions.assertThrows(MergeException.class, () -> sut.mergePDFDocuments(docMergeRequest, "id"));
+
+    }
+
+    @Test
+    @DisplayName("Exception: with ConversionException should throw MergeException")
+    public void withConversionExceptionOnXfaDocumentsShouldReturnValidDocuments() throws IOException, ConversionException {
+
+        Mockito.when(docConverterServiceClientMock.toPDFA(Mockito.any(), Mockito.any()))
+                .thenThrow(new ConversionException("conversion Exception"));
+
+        DocMergeRequest docMergeRequest = new DocMergeRequest();
+        List<Document> documents = new ArrayList<>();
+        Document document = new Document();
+        document.setData(TestHelpers.loadTestDataFromFile("RecordOfProceedings_1.5.dat"));
+        document.setIndex(2);
+        documents.add(document);
+        Document document2 = new Document();
+        document2.setData(PDF_DATA);
+        document2.setIndex(1);
+        documents.add(document2);
+        docMergeRequest.setDocuments(documents);
+        Options options = new Options();
+        options.setCreateToC(true);
+        options.setForcePDFAOnLoad(true);
+        docMergeRequest.setOptions(options);
+
         Assertions.assertThrows(MergeException.class, () -> sut.mergePDFDocuments(docMergeRequest, "id"));
 
     }
