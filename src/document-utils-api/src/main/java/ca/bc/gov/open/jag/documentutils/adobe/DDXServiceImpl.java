@@ -56,7 +56,6 @@ public class DDXServiceImpl implements DDXService {
 
             logger.error("Error Creating document Builder", e);
             throw new DocumentParserException("Error Creating document Builder", e);
-
         }
         Document document = documentBuilder.newDocument();
 
