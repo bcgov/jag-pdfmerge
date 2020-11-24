@@ -38,7 +38,7 @@ public class GlobalControllerAdvice {
         logger.error("DocMerge Exception occurred", e);
         MDC.clear();
 
-        return new ResponseEntity(new ApiError("MergeException",e.getMessage(), e.getDetails(), request.getHeader(Keys.TRANSACTION_ID)), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity(new ApiError("MergeException",e.getMessage(), e.getDetails(), request.getHeader(Keys.CORRELATION_ID)), HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 
@@ -46,14 +46,14 @@ public class GlobalControllerAdvice {
     public ResponseEntity handleNoHandlerException(NoHandlerFoundException e, WebRequest request) {
         logger.error("No Handler Found Exception occurred", e);
         MDC.clear();
-        return new ResponseEntity(new ApiError("NO_HANDLER_ERROR","Request URL does not exist.", NO_HANDLER_ERROR, request.getHeader(Keys.TRANSACTION_ID)), HttpStatus.NOT_FOUND);
+        return new ResponseEntity(new ApiError("NO_HANDLER_ERROR","Request URL does not exist.", NO_HANDLER_ERROR, request.getHeader(Keys.CORRELATION_ID)), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity handleHttpMessageNotReadableException(HttpMessageNotReadableException e, WebRequest request) {
         logger.error("Http Message Not Readable Exception occurred", e);
         MDC.clear();
-        return new ResponseEntity(new ApiError("MISSING_REQUEST_BODY_ERROR","Invalid payload.", MISSING_REQUEST_BODY_ERROR, request.getHeader(Keys.TRANSACTION_ID)), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(new ApiError("MISSING_REQUEST_BODY_ERROR","Invalid payload.", MISSING_REQUEST_BODY_ERROR, request.getHeader(Keys.CORRELATION_ID)), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
@@ -64,7 +64,7 @@ public class GlobalControllerAdvice {
                 new ApiError(
                         "UNKNOWN_ERROR",
                         "Unknown exception while trying to merge documents.",
-                        MessageFormat.format("Exception type: {0}", e.getClass().getName()), request.getHeader(Keys.TRANSACTION_ID)),
+                        MessageFormat.format("Exception type: {0}", e.getClass().getName()), request.getHeader(Keys.CORRELATION_ID)),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -74,7 +74,7 @@ public class GlobalControllerAdvice {
         logger.error("Validation exception(s) occurred", e);
 
         MDC.clear();
-        return new ResponseEntity(new ApiError("MethodArgumentNotValidException","Unknown exception while trying to merge documents.", e.getMessage(), request.getHeader(Keys.TRANSACTION_ID)), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(new ApiError("MethodArgumentNotValidException","Unknown exception while trying to merge documents.", e.getMessage(), request.getHeader(Keys.CORRELATION_ID)), HttpStatus.BAD_REQUEST);
 
     }
 

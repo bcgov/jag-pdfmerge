@@ -1,9 +1,9 @@
 package ca.bc.gov.open.jag.documentutils.api;
 
 import ca.bc.gov.open.jag.documentutils.Keys;
+import ca.bc.gov.open.jag.documentutils.adobe.AemService;
 import ca.bc.gov.open.jag.documentutils.api.models.DocMergeRequest;
 import ca.bc.gov.open.jag.documentutils.api.models.DocMergeResponse;
-import ca.bc.gov.open.jag.documentutils.adobe.AemService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -42,16 +42,19 @@ public class DocumentController {
 			consumes = MediaTypes.APPLICATION_JSON,
 			produces = MediaTypes.APPLICATION_JSON)
 	public ResponseEntity<DocMergeResponse> mergeDocumentPost(
-			@RequestHeader(value = "X-TransactionId", required = true) String transactionId,
+			@RequestHeader(value = "X-Correlation-ID", required = true) String correlationId,
+			@RequestHeader(value = "X-Client-ID", required = true) String clientId,
 			@Valid @RequestBody(required = true) DocMergeRequest request)  {
 		
 		logger.info("Starting merge process...");
 
-		MDC.put(Keys.TRANSACTION_ID, transactionId);
+		MDC.put(Keys.CORRELATION_ID, correlationId);
+		MDC.put(Keys.CLIENT_ID, clientId);
 
-		ResponseEntity result = ResponseEntity.ok(aemService.mergePDFDocuments(request, transactionId));
+		ResponseEntity result = ResponseEntity.ok(aemService.mergePDFDocuments(request, correlationId));
 
-		MDC.remove(Keys.TRANSACTION_ID);
+		MDC.remove(Keys.CORRELATION_ID);
+		MDC.remove(Keys.CLIENT_ID);
 
 		return result;
 
