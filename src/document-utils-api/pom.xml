@@ -26,7 +26,7 @@
 		<com.adobe.aem.version>6.3.0</com.adobe.aem.version>
 		<org.jacoco.version>0.8.6</org.jacoco.version>
 		<net.rakugakibox.spring.boot.version>2.7.1</net.rakugakibox.spring.boot.version>
-		<io.opentracing.contrib.version>4.1.0</io.opentracing.contrib.version>
+		<io.opentracing.contrib.version>0.3.2</io.opentracing.contrib.version>
 	</properties>
 
 	<dependencies>
