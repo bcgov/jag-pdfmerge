@@ -25,6 +25,7 @@
 		<com.adobe.livecycle.version>11.0.0</com.adobe.livecycle.version>
 		<com.adobe.aem.version>6.3.0</com.adobe.aem.version>
 		<org.jacoco.version>0.8.6</org.jacoco.version>
+		<net.rakugakibox.spring.boot.version>2.7.1</net.rakugakibox.spring.boot.version>
 	</properties>
 
 	<dependencies>
@@ -86,6 +87,11 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.rakugakibox.spring.boot</groupId>
+			<artifactId>logback-access-spring-boot-starter</artifactId>
+			<version>${net.rakugakibox.spring.boot.version}</version>
 		</dependency>
 
 		<dependency>
@@ -166,6 +172,36 @@
 
 
 	</dependencies>
+
+	<profiles>
+
+		<profile>
+			<id>default</id>
+		</profile>
+
+		<profile>
+
+			<id>openshift</id>
+
+			<repositories>
+				<repository>
+					<id>splunk-artifactory</id>
+					<name>Splunk Releases</name>
+					<url>http://splunk.jfrog.io/splunk/ext-releases-local</url>
+				</repository>
+			</repositories>
+
+			<dependencies>
+				<dependency>
+					<groupId>com.splunk.logging</groupId>
+					<artifactId>splunk-library-javalogging</artifactId>
+					<version>1.8.0</version>
+				</dependency>
+			</dependencies>
+
+		</profile>
+
+	</profiles>
 
 	<repositories>
 		<repository>
