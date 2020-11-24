@@ -26,6 +26,7 @@
 		<com.adobe.aem.version>6.3.0</com.adobe.aem.version>
 		<org.jacoco.version>0.8.6</org.jacoco.version>
 		<net.rakugakibox.spring.boot.version>2.7.1</net.rakugakibox.spring.boot.version>
+		<io.opentracing.contrib.version>0.4.0</io.opentracing.contrib.version>
 	</properties>
 
 	<dependencies>
@@ -50,6 +51,8 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -92,6 +95,13 @@
 			<groupId>net.rakugakibox.spring.boot</groupId>
 			<artifactId>logback-access-spring-boot-starter</artifactId>
 			<version>${net.rakugakibox.spring.boot.version}</version>
+		</dependency>
+
+		<!-- open tracing -->
+		<dependency>
+			<groupId>io.opentracing.contrib</groupId>
+			<artifactId>opentracing-spring-web-autoconfigure</artifactId>
+			<version>${io.opentracing.contrib.version}</version>
 		</dependency>
 
 		<dependency>
