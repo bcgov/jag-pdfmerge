@@ -4,7 +4,7 @@ public class Keys {
 
     private Keys() {}
 
-    public static String TRANSACTION_ID = "X-TransactionId";
-
+    public static String CORRELATION_ID = "X-Correlation-ID";
+    public static final String CLIENT_ID = "X-Client-Id";
 
 }

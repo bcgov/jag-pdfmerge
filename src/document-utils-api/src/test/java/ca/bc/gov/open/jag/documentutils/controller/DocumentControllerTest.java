@@ -75,7 +75,7 @@ public class DocumentControllerTest {
         options.setCreateToC(true);
         request.setOptions(options);
 
-        ResponseEntity<DocMergeResponse> actual = sut.mergeDocumentPost("id", request);
+        ResponseEntity<DocMergeResponse> actual = sut.mergeDocumentPost("id", "clientId", request);
 
         Assertions.assertEquals(HttpStatus.OK, actual.getStatusCode());
         Assertions.assertEquals("the document", actual.getBody().getDocument());

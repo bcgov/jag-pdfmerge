@@ -54,7 +54,7 @@ public class GlobalControllerAdviceTest {
     @DisplayName("500: with merge exception should return ApiError")
     public void testHandleMergeException() {
 
-        Mockito.when(webRequestMock.getHeader(Mockito.eq(Keys.TRANSACTION_ID))).thenReturn(TRANSACTION_ID);
+        Mockito.when(webRequestMock.getHeader(Mockito.eq(Keys.CORRELATION_ID))).thenReturn(TRANSACTION_ID);
 
         MergeException mergeException = new MergeException("random exception", new ParserConfigurationException("parser error"));
         ResponseEntity<ApiError> actual = sut.handleDigitalFormsException(mergeException, webRequestMock);
@@ -71,7 +71,7 @@ public class GlobalControllerAdviceTest {
     @DisplayName("404: with NoHandlerException should return ApiError")
     public void testHandleNoHandlerException() {
 
-        Mockito.when(webRequestMock.getHeader(Mockito.eq(Keys.TRANSACTION_ID))).thenReturn(TRANSACTION_ID);
+        Mockito.when(webRequestMock.getHeader(Mockito.eq(Keys.CORRELATION_ID))).thenReturn(TRANSACTION_ID);
 
         HttpHeaders header = new HttpHeaders();
         header.add("X-TransactionId", "test");
@@ -90,7 +90,7 @@ public class GlobalControllerAdviceTest {
     @DisplayName("400: with HttpMessageNotReadableException should return ApiError")
     public void testhandleHttpMessageNotReadableException() {
 
-        Mockito.when(webRequestMock.getHeader(Mockito.eq(Keys.TRANSACTION_ID))).thenReturn(TRANSACTION_ID);
+        Mockito.when(webRequestMock.getHeader(Mockito.eq(Keys.CORRELATION_ID))).thenReturn(TRANSACTION_ID);
 
         HttpHeaders header = new HttpHeaders();
         header.add("X-TransactionId", "test");
@@ -121,7 +121,7 @@ public class GlobalControllerAdviceTest {
     @DisplayName("500: with HttpMessageNotReadableException should return ApiError")
     public void testhandleException() {
 
-        Mockito.when(webRequestMock.getHeader(Mockito.eq(Keys.TRANSACTION_ID))).thenReturn(TRANSACTION_ID);
+        Mockito.when(webRequestMock.getHeader(Mockito.eq(Keys.CORRELATION_ID))).thenReturn(TRANSACTION_ID);
 
         NullPointerException exception = new NullPointerException("test");
         ResponseEntity<ApiError> actual = sut.handleDefaultException(exception, webRequestMock);
@@ -138,7 +138,7 @@ public class GlobalControllerAdviceTest {
     @DisplayName("400: with MethodArgumentNotValidException should return ApiError")
     public void testhandleValidationExceptions() {
 
-        Mockito.when(webRequestMock.getHeader(Mockito.eq(Keys.TRANSACTION_ID))).thenReturn(TRANSACTION_ID);
+        Mockito.when(webRequestMock.getHeader(Mockito.eq(Keys.CORRELATION_ID))).thenReturn(TRANSACTION_ID);
 
         List<ObjectError> errors = new ArrayList<>();
         FieldError error = new FieldError("param", "first", "message");
