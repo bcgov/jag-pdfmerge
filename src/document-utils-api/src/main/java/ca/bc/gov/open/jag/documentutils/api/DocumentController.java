@@ -50,11 +50,13 @@ public class DocumentController {
 
 		MDC.put(Keys.CORRELATION_ID, correlationId);
 		MDC.put(Keys.CLIENT_ID, clientId);
+		MDC.put(Keys.OPERATION, "MergeDocuments");
 
 		ResponseEntity result = ResponseEntity.ok(aemService.mergePDFDocuments(request, correlationId));
 
 		MDC.remove(Keys.CORRELATION_ID);
 		MDC.remove(Keys.CLIENT_ID);
+		MDC.remove(Keys.OPERATION);
 
 		return result;
 
