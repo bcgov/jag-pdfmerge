@@ -26,11 +26,11 @@ jobs:
           
       # Build API
       - name: Build, tag, and push latest and tag image to repository
-        id: build-web
+        id: build-web 
         run: |
-
+          echo "GIT_RELEASE_TAG=${​​​​​{​​​​​ github.event.release.tag_name }​​​​​}" >> $GITHUB_ENV
           docker-compose build document-utils-api 
           docker tag jag-document-utils_document-utils-api:latest ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:latest
           docker push ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:latest
-          docker tag jag-document-utils_document-utils-api:latest ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:${​​​​​{​​​​​ github.event.release.tag_name }​​​​​}​​​​​
-          docker push ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:${​​​​​{​​​​​ github.event.release.tag_name }​​​​​}​​​​​
+          docker tag jag-document-utils_document-utils-api:latest ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:${​​​​​{​​​​​ env.GIT_RELEASE_TAG }​​​​​}​​​​​
+          docker push ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:${​​​​​{​​​​​ env.GIT_RELEASE_TAG }​​​​​}​​​​​
