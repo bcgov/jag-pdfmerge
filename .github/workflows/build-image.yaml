@@ -18,11 +18,25 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Pull the latest image to build, and avoid caching pull-only images.
+      # (docker pull is faster than caching in most cases.)
+      - name: Docker Pull
+        run: |
+          docker-compose pull
+
+      # In this step, this action saves a list of existing images,
+      # the cache is created without them in the post run.
+      # It also restores the cache if it exists.
+      - uses: satackey/action-docker-layer-caching@v0.0.8
+        # Ignore the failure of a step and avoid terminating the job.
+        continue-on-error: true
           
       # Build API
       - name: Build, tag, and push image to Docker Hub
         id: build-web
         run: |
+
           docker-compose build document-utils-api 
           docker tag jag-document-utils_document-utils-api:latest teamapple/document-utils-api:latest
           docker push teamapple/document-utils-api:latest
