@@ -12,6 +12,11 @@ services:
         - SKIP_TESTS=true
     ports:
       - "8080:8080"
+    environment:
+      - DOCMERGE_AEM_ENDPOINT=${DOCMERGE_AEM_ENDPOINT}
+      - DOCMERGE_AEM_USER=${DOCMERGE_AEM_USER}
+      - DOCMERGE_AEM_PASSWORD=${DOCMERGE_AEM_PASSWORD}
+      - ENABLE_SWAGGER_UI=true
     networks:
       - doc-utils
 
