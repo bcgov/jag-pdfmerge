@@ -31,6 +31,6 @@ jobs:
 
           docker-compose build document-utils-api 
           docker tag jag-document-utils_document-utils-api:latest teamapple/document-utils-api:latest
-          docker push teamapple/document-utils-api:latest
+          docker push teamapplentt/document-utils-api:latest
           docker tag jag-document-utils_document-utils-api:latest teamapple/document-utils-api:${​​​​​{​​​​​ github.event.release.tag_name }​​​​​}​​​​​
-          docker push teamapple/document-utils-api:${​​​​​{​​​​​ github.event.release.tag_name }​​​​​}​​​​​
+          docker push teamapplentt/document-utils-api:${​​​​​{​​​​​ github.event.release.tag_name }​​​​​}​​​​​
