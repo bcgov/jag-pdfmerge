@@ -1,4 +1,4 @@
-name: Docker Build and Push - WEB
+name: Docker Build and Push Git Release Version
 
 on: 
   release:
@@ -30,7 +30,7 @@ jobs:
         run: |
 
           docker-compose build document-utils-api 
-          docker tag ${​​​​​{​​​​​ github.event.repository.name }​​​​​}​​​​​_document-utils-api:latest ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:latest
+          docker tag jag-document-utils_document-utils-api:latest ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:latest
           docker push ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:latest
-          docker tag ${​​​​​{​​​​​ github.event.repository.name }​​​​​}_document-utils-api:latest ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:${​​​​​{​​​​​ github.event.release.tag_name }​​​​​}​​​​​
+          docker tag jag-document-utils_document-utils-api:latest ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:${​​​​​{​​​​​ github.event.release.tag_name }​​​​​}​​​​​
           docker push ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:${​​​​​{​​​​​ github.event.release.tag_name }​​​​​}​​​​​
