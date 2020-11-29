@@ -24,4 +24,5 @@ jobs:
         id: build-web
         run: |
           docker-compose build document-utils-api 
+          docker tag document-utils-api:latest teamapple/document-utils-api:latest
           docker push document-utils-api:latest teamapple/document-utils:latest
