@@ -8,14 +8,6 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-
-      - name: echo var
-        run: |
-          echo version name is: ${{ github.event.release.tag_name }}
-          echo release title is: ${{ github.event.release.name }}
-          echo release body is: ${{ github.event.release.body }}
-          echo repository is: ${{ github.repository }}
-
       - name: Checkout
         uses: actions/checkout@v2
       
@@ -32,15 +24,20 @@ jobs:
         # Ignore the failure of a step and avoid terminating the job.
         continue-on-error: true
           
-      # Build API
       - name: Build, tag, and push latest and tag image to repository
-        id: build-web 
+        id: build-latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           docker-compose build document-utils-api 
           docker tag jag-document-utils_document-utils-api:latest ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:latest
           docker push ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:latest
+
+      - name: Build, tag and push Git Release Version to image repository
+        id: build-release
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
           docker-compose build document-utils-api 
           docker tag jag-document-utils_document-utils-api:latest ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:${{ github.event.release.tag_name }}
           docker push ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:${{ github.event.release.tag_name }}
