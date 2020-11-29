@@ -1,7 +1,5 @@
 name: Docker Build and Push - WEB
 
-on: [workflow_dispatch]
-
 on:
   workflow_dispatch:
     branches: [main]
