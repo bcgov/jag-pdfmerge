@@ -25,4 +25,4 @@ jobs:
         run: |
           docker-compose build document-utils-api 
           docker tag document-utils-api:latest teamapple/document-utils-api:latest
-          docker push document-utils-api:latest teamapple/document-utils:latest
+          docker push teamapple/document-utils:latest
