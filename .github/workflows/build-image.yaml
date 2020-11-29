@@ -1,4 +1,4 @@
-name: Docker Build and Push - WEB
+name: Docker Build and Push Late
 
 on:
   workflow_dispatch:
@@ -32,5 +32,6 @@ jobs:
         run: |
 
           docker-compose build document-utils-api 
-          docker tag ${​​​​​{​​​​​ github.event.repository.name }​​​​​}_document-utils-api:latest ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:latest
+          docker tag jag-document-utils_document-utils-api:latest ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:latest
           docker push ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:latest
+ 
