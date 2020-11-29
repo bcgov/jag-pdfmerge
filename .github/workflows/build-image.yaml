@@ -6,10 +6,10 @@ on:
   workflow_dispatch:
     branches: [main]
   push:
-    branches: [main]
+    branches: [main, git-docker]
 
 jobs:
-  path-context:
+  docker:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -28,5 +28,5 @@ jobs:
           # Build a docker container and
           # push it to ECR so that it can
           # be deployed to ECS.
-          docker build -t teamapple/cit2-web:latest ./src/cit2-web
-          docker push teamapple/cit2-web:latest
+          docker build -t teamapple/document-utils:latest ./src/document-utils-api
+          docker push teamapple/document-utils:latest
