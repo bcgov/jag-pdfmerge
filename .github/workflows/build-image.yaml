@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     branches: [main]
   push:
-    branches: [main, git-docker]
+    branches: [main]
 
-jobs:
+jobs:f
   docker:
     runs-on: ubuntu-latest
     steps:
