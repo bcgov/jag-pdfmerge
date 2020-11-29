@@ -1,4 +1,4 @@
-name: Docker Build and Push - WEB
+name: Docker Build and Push latest
 
 on:
   workflow_dispatch:

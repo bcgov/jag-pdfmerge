@@ -1,4 +1,4 @@
-name: Docker Build and Push - WEB
+name: Docker Build and Push Git Release Version
 
 on: 
   release:
