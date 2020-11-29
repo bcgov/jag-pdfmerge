@@ -33,5 +33,5 @@ jobs:
           docker-compose build document-utils-api 
           docker tag jag-document-utils_document-utils-api:latest ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:latest
           docker push ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:latest
-          docker tag jag-document-utils_document-utils-api:latest ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:${​​​​​{​​​​​ env.GIT_RELEASE_TAG }​​​​​}​​​​​
+          docker tag jag-document-utils_document-utils-api:latest ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:${​​​​​{​​​​​ GIT_RELEASE_TAG }​​​​​}​​​​​
           docker push ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:${​​​​​{​​​​​ env.GIT_RELEASE_TAG }​​​​​}​​​​​
