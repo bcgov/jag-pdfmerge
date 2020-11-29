@@ -20,11 +20,8 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           
       # Build API
-      - name: Build, tag, and push image to Amazon ECR
+      - name: Build, tag, and push image to Docker Hub
         id: build-web
         run: |
-          # Build a docker container and
-          # push it to ECR so that it can
-          # be deployed to ECS.
-          docker build -t teamapple/document-utils:latest ./src/document-utils-api
-          docker push teamapple/document-utils:latest
+          docker-compose build document-utils-api 
+          docker push document-utils-api:latest teamapple/document-utils:latest
