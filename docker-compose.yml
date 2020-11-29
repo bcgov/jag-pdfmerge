@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+
+  #############################################################################################
+  ###                           Document Utils api                                          ###
+  #############################################################################################
+  document-utils-api:
+    build:
+      context: ./src/document-utils-api
+      args:
+        - MVN_PROFILE=openshift
+        - SKIP_TESTS=true
+    ports:
+      - "8080:8080"
+    networks:
+      - doc-utils
+
+networks:
+  doc-utils:
+    driver: "bridge"
