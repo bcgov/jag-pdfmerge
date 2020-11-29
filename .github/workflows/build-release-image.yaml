@@ -39,7 +39,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           docker-compose build document-utils-api 
-          docker tag jag-document-utils_document-utils-api:latest ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:latest
-          docker push ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:latest
-          docker tag jag-document-utils_document-utils-api:latest ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:1​​​​​​​
-          docker push ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:1
+          docker tag jag-document-utils_document-utils-api:latest ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:abc
+          docker push ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:abc
