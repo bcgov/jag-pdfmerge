@@ -4,9 +4,9 @@ on: [workflow_dispatch]
 
 on:
   workflow_dispatch:
-    branches: [master]
+    branches: [main]
   push:
-    branches: [master]
+    branches: [main]
 
 jobs:
   path-context:
