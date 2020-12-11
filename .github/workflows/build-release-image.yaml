@@ -41,6 +41,11 @@ jobs:
           docker-compose build document-utils-api 
           docker tag jag-document-utils_document-utils-api:latest ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:latest
           docker push ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:latest
+<<<<<<< Updated upstream
           docker-compose build document-utils-api 
           docker tag jag-document-utils_document-utils-api:latest ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:${{ github.event.release.tag_name }}
           docker push ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:${{ github.event.release.tag_name }}
+=======
+          docker tag jag-document-utils_document-utils-api:latest ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:${​​​​​​​{​​​​​​​ github.ref }​​​​​​​}​​​​​​​
+          docker push ${{ secrets.DOCKERHUB_ORG }}/document-utils-api:${​​​​​​​{​​​​​​​ github.ref }​​​​​​​}​​​​​​​
+>>>>>>> Stashed changes
