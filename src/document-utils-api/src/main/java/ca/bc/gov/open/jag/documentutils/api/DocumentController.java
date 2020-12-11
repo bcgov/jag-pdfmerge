@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,7 @@ import javax.validation.Valid;
 @Validated
 @RequestMapping("document")
 @Api(tags = "Document Api")
+@Scope("request")
 public class DocumentController {
 
 	private final AemService aemService;

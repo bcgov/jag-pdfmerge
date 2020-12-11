@@ -7,6 +7,7 @@ import com.adobe.livecycle.docconverter.client.DocConverterServiceClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerFactory;
@@ -23,6 +24,7 @@ public class AdobeConfig {
     }
 
     @Bean
+    @Scope("request")
     public ServiceClientFactory serviceClientFactory() {
 
         Properties connectionProps = new Properties();
@@ -36,11 +38,13 @@ public class AdobeConfig {
     }
 
     @Bean
+    @Scope("request")
     public AssemblerServiceClient assemblerClient(ServiceClientFactory serviceClientFactory) {
         return new AssemblerServiceClient(serviceClientFactory);
     }
 
     @Bean
+    @Scope("request")
     public DocConverterServiceClient docConverterServiceClient(ServiceClientFactory serviceClientFactory) {
         return new DocConverterServiceClient(serviceClientFactory);
     }
