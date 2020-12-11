@@ -19,6 +19,7 @@ import com.adobe.livecycle.docconverter.client.PDFAConversionResult;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
 
@@ -28,12 +29,9 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * PDF Merge service.
- *
- * @author shaunmillargov
- */
+
 @Service
+@Scope("request")
 public class AemServiceImpl implements AemService {
 
     private final Logger logger = LoggerFactory.getLogger(AemServiceImpl.class);
