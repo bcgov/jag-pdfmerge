@@ -18,7 +18,7 @@ services:
       - DOCMERGE_AEM_PASSWORD=${DOCMERGE_AEM_PASSWORD}
       - ENABLE_SWAGGER_UI=true
       - JDU_KC_AUTH_SERVER_URL=${JDU_KC_AUTH_SERVER_URL:-http://keycloak:8080/auth}
-      - JDU_KC_REALM=${JDU_KC_REALM:-document-utils}
+      - JDU_KC_REALM=${JDU_KC_REALM:-jag-document-utils-api}
     networks:
       - doc-utils
 
