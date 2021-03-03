@@ -27,6 +27,7 @@
 		<org.jacoco.version>0.8.6</org.jacoco.version>
 		<net.rakugakibox.spring.boot.version>2.7.1</net.rakugakibox.spring.boot.version>
 		<io.opentracing.contrib.version>0.3.2</io.opentracing.contrib.version>
+		<org.keycloak.version>11.0.3</org.keycloak.version>
 	</properties>
 
 	<dependencies>
@@ -180,6 +181,17 @@
 			<artifactId>wsdl4j</artifactId>
 		</dependency>
 
+		<!--keycloak-->
+		<dependency>
+			<groupId>org.keycloak</groupId>
+			<artifactId>keycloak-spring-boot-starter</artifactId>
+			<version>${org.keycloak.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
 
 	</dependencies>
 

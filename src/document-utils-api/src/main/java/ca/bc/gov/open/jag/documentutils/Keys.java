@@ -9,5 +9,6 @@ public class Keys {
     public static String CORRELATION_ID = "X-Correlation-ID";
     public static final String CLIENT_ID = "X-Client-Id";
     public static final String OPERATION = "Operation";
+    public static final String API_ROLE_NAME = "document-utils-client";
 
 }

@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 /**
@@ -43,6 +44,7 @@ public class DocumentController {
 	@PostMapping(value = {"/merge" },
 			consumes = MediaTypes.APPLICATION_JSON,
 			produces = MediaTypes.APPLICATION_JSON)
+	@RolesAllowed({Keys.API_ROLE_NAME})
 	public ResponseEntity<DocMergeResponse> mergeDocumentPost(
 			@RequestHeader(value = "X-Correlation-ID", required = true) String correlationId,
 			@RequestHeader(value = "X-Client-ID", required = true) String clientId,
