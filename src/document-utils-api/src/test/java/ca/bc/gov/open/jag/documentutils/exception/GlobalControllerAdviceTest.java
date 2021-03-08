@@ -118,23 +118,6 @@ public class GlobalControllerAdviceTest {
     }
 
     @Test
-    @DisplayName("500: with HttpMessageNotReadableException should return ApiError")
-    public void testhandleException() {
-
-        Mockito.when(webRequestMock.getHeader(Mockito.eq(Keys.CORRELATION_ID))).thenReturn(TRANSACTION_ID);
-
-        NullPointerException exception = new NullPointerException("test");
-        ResponseEntity<ApiError> actual = sut.handleDefaultException(exception, webRequestMock);
-
-        Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, actual.getStatusCode());
-        Assertions.assertEquals(TRANSACTION_ID, actual.getBody().getTransactionId());
-        Assertions.assertEquals("Exception type: java.lang.NullPointerException", actual.getBody().getDetail());
-        Assertions.assertEquals("UNKNOWN_ERROR", actual.getBody().getError());
-        Assertions.assertEquals("Unknown exception while trying to merge documents.", actual.getBody().getMessage());
-
-    }
-
-    @Test
     @DisplayName("400: with MethodArgumentNotValidException should return ApiError")
     public void testhandleValidationExceptions() {
 

@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import java.text.MessageFormat;
-
 /**
  * Global Exception handler for rest controllers
  *
@@ -54,18 +52,6 @@ public class GlobalControllerAdvice {
         logger.error("Http Message Not Readable Exception occurred", e);
         MDC.clear();
         return new ResponseEntity(new ApiError("MISSING_REQUEST_BODY_ERROR","Invalid payload.", MISSING_REQUEST_BODY_ERROR, request.getHeader(Keys.CORRELATION_ID)), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity handleDefaultException(Exception e, WebRequest request) {
-        logger.error("Exception occurred", e);
-        MDC.clear();
-        return new ResponseEntity(
-                new ApiError(
-                        "UNKNOWN_ERROR",
-                        "Unknown exception while trying to merge documents.",
-                        MessageFormat.format("Exception type: {0}", e.getClass().getName()), request.getHeader(Keys.CORRELATION_ID)),
-                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
