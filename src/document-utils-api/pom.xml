@@ -24,7 +24,7 @@
 		<org.apache.pdfbox.version>2.0.21</org.apache.pdfbox.version>
 		<com.adobe.livecycle.version>11.0.0</com.adobe.livecycle.version>
 		<com.adobe.aem.version>6.3.0</com.adobe.aem.version>
-		<org.jacoco.version>0.8.6</org.jacoco.version>
+		<org.jacoco.version>0.8.7</org.jacoco.version>
 		<net.rakugakibox.spring.boot.version>2.7.1</net.rakugakibox.spring.boot.version>
 		<io.opentracing.contrib.version>0.3.2</io.opentracing.contrib.version>
 		<org.keycloak.version>11.0.3</org.keycloak.version>
