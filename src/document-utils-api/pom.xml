@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>ca.bc.gov.open</groupId>
 	<artifactId>document-utils-api</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.1</version>
 	<name>document-utils-api</name>
 	<description>A RESTful Document Merging Service</description>
 
@@ -28,6 +28,7 @@
 		<net.rakugakibox.spring.boot.version>2.7.1</net.rakugakibox.spring.boot.version>
 		<io.opentracing.contrib.version>0.3.2</io.opentracing.contrib.version>
 		<org.keycloak.version>11.0.3</org.keycloak.version>
+		<log4j2.version>2.16.0</log4j2.version>
 	</properties>
 
 	<dependencies>
@@ -217,7 +218,7 @@
 				<dependency>
 					<groupId>com.splunk.logging</groupId>
 					<artifactId>splunk-library-javalogging</artifactId>
-					<version>1.8.0</version>
+					<version>1.11.1</version>
 				</dependency>
 			</dependencies>
 
