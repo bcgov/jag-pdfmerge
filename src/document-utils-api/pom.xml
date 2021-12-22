@@ -17,6 +17,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<log4j2.version>2.17.0</log4j2.version>
 		<springfox.version>2.9.2</springfox.version>
 		<org.apache.axis.version>1.4</org.apache.axis.version>
 		<commons-io.version>2.8.0</commons-io.version>
@@ -147,24 +148,32 @@
 			<groupId>com.adobe.livecycle</groupId>
 			<artifactId>adobe-livecycle-client</artifactId>
 			<version>${com.adobe.livecycle.version}</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/adobe-livecycle-client-11.0.0.jar</systemPath>
 		</dependency>
 
 		<dependency>
 			<groupId>com.adobe.livecycle</groupId>
 			<artifactId>adobe-usermanager-client</artifactId>
 			<version>${com.adobe.livecycle.version}</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/adobe-usermanager-client-11.0.0.jar</systemPath>
 		</dependency>
 
 		<dependency>
 			<groupId>com.adobe.livecycle</groupId>
 			<artifactId>adobe-assembler-client</artifactId>
 			<version>${com.adobe.livecycle.version}</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/adobe-assembler-client-11.0.0.jar</systemPath>
 		</dependency>
 		
 		<dependency>
 			<groupId>com.adobe.livecycle</groupId>
 			<artifactId>adobe-docconverter-client</artifactId>
 			<version>${com.adobe.livecycle.version}</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/adobe-docconverter-client-11.0.0.jar</systemPath>
 		</dependency>
 
 		<!-- Adobe AEM UberJar for AEM, version 6.2.0 -->
@@ -217,7 +226,7 @@
 				<dependency>
 					<groupId>com.splunk.logging</groupId>
 					<artifactId>splunk-library-javalogging</artifactId>
-					<version>1.8.0</version>
+					<version>1.11.3</version>
 				</dependency>
 			</dependencies>
 
