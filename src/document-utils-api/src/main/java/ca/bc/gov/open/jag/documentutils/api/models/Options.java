@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
  * @author shaunmillargov
  *
  */
-@JsonPropertyOrder({ "forcePDFAOnLoad", "createToC" })
+@JsonPropertyOrder({ "forcePDFAOnLoad", "createToC", "forceEvenPageCount" })
 public class Options {
 
 	@NotNull
@@ -22,6 +22,11 @@ public class Options {
 	@NotNull
 	@JsonProperty("createToC")
 	private boolean createToC;
+	
+	@NotNull
+	@JsonProperty("forceEvenPageCount")
+	private boolean forceEvenPageCount;
+	
 
 	public boolean isForcePDFAOnLoad() {
 		return forcePDFAOnLoad;
@@ -37,5 +42,13 @@ public class Options {
 
 	public void setCreateToC(boolean createToC) {
 		this.createToC = createToC;
+	}
+	
+	public boolean isForceEvenPageCount() {
+		return forceEvenPageCount;
+	}
+
+	public void setForceEvenPageCount(boolean forceEvenPageCount) {
+		this.forceEvenPageCount = forceEvenPageCount;
 	}
 }

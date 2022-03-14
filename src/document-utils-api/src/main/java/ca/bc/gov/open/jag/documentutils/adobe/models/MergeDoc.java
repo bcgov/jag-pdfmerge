@@ -32,6 +32,8 @@ public class MergeDoc {
 
 	public byte[] getFile() { return file; }
 	
+	public void setFile(byte[] file) {
+		this.file = file;
+	}
 	
-
 }

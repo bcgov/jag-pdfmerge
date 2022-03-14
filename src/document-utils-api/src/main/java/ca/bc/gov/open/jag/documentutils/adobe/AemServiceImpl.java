@@ -64,6 +64,12 @@ public class AemServiceImpl implements AemService {
 
         // Sort the document based on placement id in the event they are mixed. lowest to highest
         LinkedList<MergeDoc> pageList = convertToLinkedList(request);
+        
+        // CJB-1685
+        if (request.getOptions().isForceEvenPageCount()) {
+        	logger.info("Forcing Even Page count");
+        	FixPageCount(pageList); 
+        }
 
         // Use DDXUtils to Dynamically generate the DDX file sent to AEM.
         Document myDDX = convertToDDxDocument(request, pageList);
@@ -83,6 +89,36 @@ public class AemServiceImpl implements AemService {
         return resp;
 
     }
+    
+    private void FixPageCount(LinkedList<MergeDoc> pageList) {
+   	 	pageList.forEach(
+   	            (element) -> MakeEvenPages(element));
+	}
+    
+    /**
+     * Scan the page count of the binary. If odd, add another page to the PDF doc.
+     * 
+     * @param element
+     * @return
+     */
+	private void MakeEvenPages(MergeDoc pdfDoc) {
+	
+		if ( null != pdfDoc.getFile() ) {
+			int n = PDFBoxUtilities.getPages(pdfDoc.getFile());
+			if ( n % 2 == 0 )
+				logger.debug("PDF Document has even number of pages.");
+			else {
+				logger.debug("PDF Document has odd number of pages. Adding blank page");
+				try {
+					PDFBoxUtilities.addBlankPage(pdfDoc);
+				} catch (IOException e) {
+					logger.error("MakeEvenPages: Failure to add a new page to document with an odd number of pages. Detail: " + e.getMessage());
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
 
     private Map<String, Document> getAssemblerJobMap(Document myDDX, Map<String, Object> inputs) {
 
