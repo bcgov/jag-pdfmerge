@@ -13,17 +13,25 @@ public class MergeDoc {
 	
 	private String id; 
 	private byte[] file;
+	private String title;
 
-	public MergeDoc(byte[] file) {
+	public MergeDoc(byte[] file, String title) {
 		UUID uniqueKey = UUID.randomUUID();
 		this.id = uniqueKey.toString();
 		this.file = file; 
+		this.title = title; 
 	}
 	
 	public String getId() {
 		return id;
 	}
 	
+	public String getTitle() {
+		return title;
+	}
+
 	public byte[] getFile() { return file; }
+	
+	
 
 }
