@@ -210,7 +210,6 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<includeSystemScope>true</includeSystemScope>
 					<mainClass>ca.bc.gov.open.jag.documentutils.DocumentUtilsApplication</mainClass>
 				</configuration>
 			</plugin>
