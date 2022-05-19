@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import javax.validation.constraints.NotNull;
 
-@JsonPropertyOrder({ "id", "docType", "order", "data" })
+@JsonPropertyOrder({ "index", "data", "title" })
 public class Document {
 	
 	@NotNull
@@ -15,6 +15,9 @@ public class Document {
 	@NotNull
 	@JsonProperty("data")
 	private String data;
+	
+	@JsonProperty("title")
+	private String title;
 
 	public int getIndex() {
 		return index;
@@ -31,4 +34,13 @@ public class Document {
 	public void setData(String data) {
 		this.data = data;
 	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 }

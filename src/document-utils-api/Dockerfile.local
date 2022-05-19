@@ -1,0 +1,5 @@
+FROM openjdk:8-jre-slim
+
+COPY ./target/document-utils-api-0.1.0.jar document-utils-api-0.1.0.jar
+
+ENTRYPOINT ["java","-jar","/document-utils-api-0.1.0.jar"]

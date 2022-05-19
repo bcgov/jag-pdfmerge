@@ -5,14 +5,17 @@
  */
 package ca.bc.gov.open.jag.documentutils.utils;
 
+import ca.bc.gov.open.jag.documentutils.adobe.models.MergeDoc;
 import ca.bc.gov.open.jag.documentutils.exception.MergeException;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.apache.pdfbox.pdmodel.interactive.form.PDXFAResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
@@ -77,6 +80,47 @@ public class PDFBoxUtilities {
 			throw new MergeException("File not a PDF.", e.getCause());
 		}
 		
+	}
+	
+	/**
+	 * Get number of pages of the PDF binary
+	 * 
+	 * @param file
+	 * @return
+	 */
+	public static int getPages(byte[] file)  {
+		PDDocument doc;
+		int pages = 0;
+		try {
+			doc = PDDocument.load(file);
+			pages = doc.getNumberOfPages();
+			doc.close();
+			return pages;
+		} catch (IOException e) {
+			logger.error("Error caught at getPages: " + e.getMessage() + ". Returning 0 pages");
+			e.printStackTrace();
+			return pages;
+		}
+	}
+	
+	/**
+	 * Add a blank page to the rear of the document.
+	 * 
+	 * @param pdfDoc
+	 * @throws IOException 
+	 */
+	public static void addBlankPage(MergeDoc pdfDoc) throws IOException {
+		
+		logger.info("Calling addPage");
+		
+		PDDocument doc = PDDocument.load(pdfDoc.getFile());
+		doc.addPage(new PDPage());
+
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		doc.save(byteArrayOutputStream);
+		doc.close();
+		
+		pdfDoc.setFile(byteArrayOutputStream.toByteArray());
 	}
 
 }

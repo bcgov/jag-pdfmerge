@@ -63,7 +63,7 @@ public class DDXServiceImplTest {
         Mockito.when(documentBuilderFactoryMock.newDocumentBuilder()).thenReturn(documentBuilderMock);
 
         LinkedList<MergeDoc> pageList = new LinkedList<>();
-        MergeDoc mergeDoc = new MergeDoc("test".getBytes());
+        MergeDoc mergeDoc = new MergeDoc("test".getBytes(), "title");
         pageList.add(mergeDoc);
 
         Document actual = sut.createMergeDDX(pageList, true);
@@ -79,7 +79,7 @@ public class DDXServiceImplTest {
         Mockito.when(documentBuilderFactoryMock.newDocumentBuilder()).thenThrow(new ParserConfigurationException("random"));
 
         LinkedList<MergeDoc> pageList = new LinkedList<>();
-        MergeDoc mergeDoc = new MergeDoc("test".getBytes());
+        MergeDoc mergeDoc = new MergeDoc("test".getBytes(), "title");
         pageList.add(mergeDoc);
 
         Assertions.assertThrows (DocumentParserException.class, () ->  sut.createMergeDDX(pageList, true));
@@ -94,7 +94,7 @@ public class DDXServiceImplTest {
         Mockito.when(transformerFactoryMock.newTransformer()).thenReturn(transformerMock);
 
         LinkedList<MergeDoc> pageList = new LinkedList<>();
-        MergeDoc mergeDoc = new MergeDoc("test".getBytes());
+        MergeDoc mergeDoc = new MergeDoc("test".getBytes(), "title");
         pageList.add(mergeDoc);
 
         Document documentToConvert = sut.createMergeDDX(pageList, true);
@@ -111,7 +111,7 @@ public class DDXServiceImplTest {
         Mockito.when(transformerFactoryMock.newTransformer()).thenThrow(new TransformerConfigurationException("random"));
 
         LinkedList<MergeDoc> pageList = new LinkedList<>();
-        MergeDoc mergeDoc = new MergeDoc("test".getBytes());
+        MergeDoc mergeDoc = new MergeDoc("test".getBytes(), "title");
         pageList.add(mergeDoc);
 
         Document documentToConvert = sut.createMergeDDX(pageList, true);

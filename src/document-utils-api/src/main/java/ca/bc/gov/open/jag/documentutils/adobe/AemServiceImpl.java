@@ -1,11 +1,18 @@
 package ca.bc.gov.open.jag.documentutils.adobe;
 
-import ca.bc.gov.open.jag.documentutils.adobe.models.MergeDoc;
-import ca.bc.gov.open.jag.documentutils.api.MediaTypes;
-import ca.bc.gov.open.jag.documentutils.api.models.DocMergeRequest;
-import ca.bc.gov.open.jag.documentutils.api.models.DocMergeResponse;
-import ca.bc.gov.open.jag.documentutils.exception.MergeException;
-import ca.bc.gov.open.jag.documentutils.utils.PDFBoxUtilities;
+import java.io.IOException;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Base64Utils;
+
 import com.adobe.idp.Document;
 import com.adobe.idp.dsc.clientsdk.ServiceClientFactory;
 import com.adobe.livecycle.assembler.client.AssemblerOptionSpec;
@@ -16,18 +23,13 @@ import com.adobe.livecycle.docconverter.client.ConversionException;
 import com.adobe.livecycle.docconverter.client.DocConverterServiceClient;
 import com.adobe.livecycle.docconverter.client.PDFAConversionOptionSpec;
 import com.adobe.livecycle.docconverter.client.PDFAConversionResult;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Base64Utils;
 
-import java.io.IOException;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.stream.Collectors;
+import ca.bc.gov.open.jag.documentutils.adobe.models.MergeDoc;
+import ca.bc.gov.open.jag.documentutils.api.MediaTypes;
+import ca.bc.gov.open.jag.documentutils.api.models.DocMergeRequest;
+import ca.bc.gov.open.jag.documentutils.api.models.DocMergeResponse;
+import ca.bc.gov.open.jag.documentutils.exception.MergeException;
+import ca.bc.gov.open.jag.documentutils.utils.PDFBoxUtilities;
 
 
 @Service
@@ -62,6 +64,12 @@ public class AemServiceImpl implements AemService {
 
         // Sort the document based on placement id in the event they are mixed. lowest to highest
         LinkedList<MergeDoc> pageList = convertToLinkedList(request);
+        
+        // CJB-1685
+        if (request.getOptions().isForceEvenPageCount()) {
+        	logger.info("Forcing Even Page count");
+        	FixPageCount(pageList); 
+        }
 
         // Use DDXUtils to Dynamically generate the DDX file sent to AEM.
         Document myDDX = convertToDDxDocument(request, pageList);
@@ -81,6 +89,36 @@ public class AemServiceImpl implements AemService {
         return resp;
 
     }
+    
+    private void FixPageCount(LinkedList<MergeDoc> pageList) {
+   	 	pageList.forEach(
+   	            (element) -> MakeEvenPages(element));
+	}
+    
+    /**
+     * Scan the page count of the binary. If odd, add another page to the PDF doc.
+     * 
+     * @param element
+     * @return
+     */
+	private void MakeEvenPages(MergeDoc pdfDoc) {
+	
+		if ( null != pdfDoc.getFile() ) {
+			int n = PDFBoxUtilities.getPages(pdfDoc.getFile());
+			if ( n % 2 == 0 )
+				logger.debug("PDF Document has even number of pages.");
+			else {
+				logger.debug("PDF Document has odd number of pages. Adding blank page");
+				try {
+					PDFBoxUtilities.addBlankPage(pdfDoc);
+				} catch (IOException e) {
+					logger.error("MakeEvenPages: Failure to add a new page to document with an odd number of pages. Detail: " + e.getMessage());
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
 
     private Map<String, Document> getAssemblerJobMap(Document myDDX, Map<String, Object> inputs) {
 
@@ -118,11 +156,11 @@ public class AemServiceImpl implements AemService {
 
         if (request.getOptions().isForcePDFAOnLoad() && PDFBoxUtilities.isPDFXfa(docBytes)) {
             logger.info("forcePDFA is on and document, order {}, is XFA. Converting to PDF/A...", doc.getIndex());
-            return new MergeDoc(createPDFADocument(docBytes));
+            return new MergeDoc(createPDFADocument(docBytes), doc.getTitle());
         }
 
         logger.info("Loaded page {}", doc.getIndex());
-        return new MergeDoc(docBytes);
+        return new MergeDoc(docBytes, doc.getTitle());
     }
 
     private String buildOutputDocument(Document document) {
@@ -159,7 +197,6 @@ public class AemServiceImpl implements AemService {
             logger.error("Error while converting document tp PDFA", e);
             throw new MergeException("Error while converting document tp PDFA", e);
         }
-
 
     }
 

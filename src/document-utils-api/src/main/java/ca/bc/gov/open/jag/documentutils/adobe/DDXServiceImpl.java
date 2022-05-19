@@ -78,14 +78,23 @@ public class DDXServiceImpl implements DDXService {
         }
 
         // Add each pageId element to the DDX
-        for (int i = 0; i < pageList.size(); i++) {
+        int c = 1;
+        for( MergeDoc element: pageList ) {
+        	
             Element PDF = (Element) document.createElement(AdobeKeys.DDX_ELEMENT_PDF);
-            PDF.setAttribute(AdobeKeys.DDX_SOURCE_ATTRIBUTE, pageList.get(i).getId());
-            if (addToC) {
-                PDF.setAttribute("bookmarkTitle", "Document " + (i + 1));
-                PDF.setAttribute("includeInTOC", "true");
+            PDF.setAttribute(AdobeKeys.DDX_SOURCE_ATTRIBUTE, element.getId());
+            
+            // from JustinCJB-1684: If there's a title, add a bookmark. 
+            if (null != element.getTitle()) { 
+            	PDF.setAttribute("bookmarkTitle", element.getTitle());
+            	// if ToC is indicated, add the bookmark to the ToC 
+            	if (addToC) {
+            		PDF.setAttribute("includeInTOC", "true");
+            	}
             }
+            
             PDFs.appendChild(PDF);
+            ++c;
         }
 
         return document;
