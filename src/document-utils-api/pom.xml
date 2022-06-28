@@ -28,7 +28,7 @@
 		<org.jacoco.version>0.8.6</org.jacoco.version>
 		<net.rakugakibox.spring.boot.version>2.7.1</net.rakugakibox.spring.boot.version>
 		<io.opentracing.contrib.version>0.3.2</io.opentracing.contrib.version>
-		<org.keycloak.version>11.0.3</org.keycloak.version>
+		<org.keycloak.version>18.0.2</org.keycloak.version>
 	</properties>
 
 	<dependencies>
