@@ -22,7 +22,7 @@
 		<org.apache.axis.version>1.4</org.apache.axis.version>
 		<commons-io.version>2.8.0</commons-io.version>
 		<commons-discovery.version>0.5</commons-discovery.version>
-		<org.apache.pdfbox.version>2.0.21</org.apache.pdfbox.version>
+		<org.apache.pdfbox.version>2.0.27</org.apache.pdfbox.version>
 		<com.adobe.livecycle.version>11.0.0</com.adobe.livecycle.version>
 		<com.adobe.aem.version>6.5.0</com.adobe.aem.version>
 		<org.jacoco.version>0.8.6</org.jacoco.version>
