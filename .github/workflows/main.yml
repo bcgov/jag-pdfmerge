@@ -91,11 +91,10 @@ jobs:
       # Labels the deployment config of the application with latest gitsha to spin up the pods labelled in same version
       - name: Labelling DC of jag-document-utils-api to latest gitsha
         env:
-          latestgitsha: ${{ env.gitsha }}
           appName: ${{github.event.inputs.app}}
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
         run: |
-          oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.latestgitsha }}.${{ env.gitsha }}"}}}}}'
+          oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.gitsha }}"}}}}}'
       
       # Wait to DC rollout of jag-document-utils-api to get completed
       - name: Wait for DC rollout of jag-document-utils-api
