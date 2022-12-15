@@ -64,7 +64,7 @@ jobs:
           openshiftIImageRegistry: ${{secrets.OPENSHIFT_INTERNAL_REPOSITORY}}
           timestamp: ${{ env.timestamp }}
         run: |
-          oc tag ${openshiftIImageRegistry}/${openshiftToolsNamespace}/${appName}:prod ${appName}:prod-backup-${timestamp}
+          oc tag ${openshiftIImageRegistry}/${openshiftToolsNamespace}/${appName}:dev ${appName}:exp-backup-${timestamp}
         
         # Re-Tag latest dev (source) image to other env to trigger openshift deployment via DeploymentConfig
       - name: Retag dev image to target release env to trigger deployment
@@ -75,4 +75,4 @@ jobs:
           openshiftToolsNamespace: ${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}
           openshiftIImageRegistry: ${{secrets.OPENSHIFT_INTERNAL_REPOSITORY}}
         run: |
-          oc tag ${openshiftIImageRegistry}/${openshiftToolsNamespace}/${appName}:${imageSourceEnv} ${appName}:${imageTargetEnv}
+          oc tag ${openshiftIImageRegistry}/${openshiftToolsNamespace}/${appName}:${imageSourceEnv} ${appName}:exp
