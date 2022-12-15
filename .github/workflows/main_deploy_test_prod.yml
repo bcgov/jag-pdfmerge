@@ -1,0 +1,78 @@
+# Used to trigger deployment to test and prod Openshift environnment by Image stream re-tagging and labelling pod
+
+name: Trigger deployment to test and prod Openshift environnment by Image stream re-tagging and labelling pod
+
+on:        
+  workflow_dispatch:
+    inputs:
+      app:
+        description: 'App Name (jag-document-utils-api)'
+        required: true
+        default: 'jag-document-utils-api'
+      imageSourceEnv:
+        description: Image Source environment
+        options: 
+        - dev    
+        required: true
+        default: 'dev'
+      imageTargetEnv:
+        type: choice
+        description: Target Release Environment
+        options: 
+        - test
+        - prod    
+        required: true
+
+jobs:
+  oc-image-tagging:
+    runs-on: ubuntu-20.04
+    environment: ${{ github.event.inputs.imageTargetEnv }}
+    steps:
+
+        # Prints vital release paramters used
+      - name: Print Release Variables
+        run: |
+          echo "Release Application: ${{ github.event.inputs.app }}"
+          echo "Release Source Environment: ${{ github.event.inputs.imageSourceEnv }}"
+          echo "Release Target Environment: ${{ github.event.inputs.imageTargetEnv }}"
+      
+        # Get Timestamp
+      - name: Get Timestamp
+        id: gettime
+        run: |
+          currentdatetime=$(echo date +"%Y_%m_%d_%Z")
+          echo "timestamp=$currentdatetime" >> $GITHUB_ENV
+      
+        #Login to Openshift using OC Tools SA and Token for image stream tagging changes
+      - name: Authenticate OC Tools SA
+        uses: redhat-actions/oc-login@v1
+        env:
+          OPENSHIFT_NAMESPACE: ${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}
+          OPENSHIFT_USER: ${{secrets.OPENSHIFT_SA_TOOLS_DEPLOYER_NAME}}
+        with:
+          openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
+          openshift_token: ${{secrets.OPENSHIFT_SA_TOOLS_DEPLOYER_TOKEN}}
+          namespace: ${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}
+      
+        # Take a backup tag of current prod image for any future rollback
+      - name: Backup Prod image for any future release rollbackups
+        if: ${{ github.event.inputs.imageTargetEnv == 'prod' }}
+        env:
+          appName: ${{ github.event.inputs.app }}
+          imageTargetEnv: ${{ github.event.inputs.imageTargetEnv }}
+          openshiftToolsNamespace: ${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}
+          openshiftIImageRegistry: ${{secrets.OPENSHIFT_INTERNAL_REPOSITORY}}
+          timestamp: ${{ env.timestamp }}
+        run: |
+          oc tag ${openshiftIImageRegistry}/${openshiftToolsNamespace}/${appName}:prod ${appName}:prod-backup-${timestamp}
+        
+        # Re-Tag latest dev (source) image to other env to trigger openshift deployment via DeploymentConfig
+      - name: Retag dev image to target release env to trigger deployment
+        env:
+          appName: ${{ github.event.inputs.app }}
+          imageSourceEnv: ${{ github.event.inputs.imageSourceEnv }}
+          imageTargetEnv: ${{ github.event.inputs.imageTargetEnv }}
+          openshiftToolsNamespace: ${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}
+          openshiftIImageRegistry: ${{secrets.OPENSHIFT_INTERNAL_REPOSITORY}}
+        run: |
+          oc tag ${openshiftIImageRegistry}/${openshiftToolsNamespace}/${appName}:${imageSourceEnv} ${appName}:${imageTargetEnv}
