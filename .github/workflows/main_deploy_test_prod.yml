@@ -43,6 +43,7 @@ jobs:
         run: |
           currentdatetime=$(echo date +"%Y_%m_%d_%Z")
           echo "timestamp=$currentdatetime" >> $GITHUB_ENV
+          echo $timestamp
       
         #Login to Openshift using OC Tools SA and Token for image stream tagging changes
       - name: Authenticate OC Tools SA
