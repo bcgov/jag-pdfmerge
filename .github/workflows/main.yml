@@ -72,36 +72,35 @@ jobs:
       #Push image jag-document-utils-api to OpenShift Image stream
       - name: Push Image jag-document-utils-api to Openshift Image Stream
         env:
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app}}:latest
-          #IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app}}:${{ github.event.inputs.env }}
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app}}:${{ github.event.inputs.env }}
         run: |
           docker tag ${{github.event.inputs.app}}:${{env.gitsha}} ${IMAGE}
           docker push ${IMAGE}
       
-      # #Login to Openshift using OC SA and Token of respective env. for Pod labelling
-      # - name: Authenticate OC Env Specific SA
-      #   uses: redhat-actions/oc-login@v1
-      #   env:
-      #     OPENSHIFT_NAMESPACE: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
-      #     OPENSHIFT_USER: ${{secrets.OPENSHIFT_SA_Env_DEPLOYER_NAME}}
-      #   with:
-      #     openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
-      #     openshift_token: ${{secrets.OPENSHIFT_SA_ENV_DEPLOYER_TOKEN}}
-      #     namespace: ${OPENSHIFT_NAMESPACE}
+      #Login to Openshift using OC SA and Token of respective env. for Pod labelling
+      - name: Authenticate OC Env Specific SA
+        uses: redhat-actions/oc-login@v1
+        env:
+          OPENSHIFT_NAMESPACE: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
+          OPENSHIFT_USER: ${{secrets.OPENSHIFT_SA_Env_DEPLOYER_NAME}}
+        with:
+          openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
+          openshift_token: ${{secrets.OPENSHIFT_SA_ENV_DEPLOYER_TOKEN}}
+          namespace: ${OPENSHIFT_NAMESPACE}
       
-      # # Labels the deployment config of the application with latest gitsha to spin up the pods labelled in same version
-      # - name: Labelling DC of jag-document-utils-api to latest gitsha
-      #   env:
-      #     latestgitsha: ${{ env.gitsha }}
-      #     appName: ${{github.event.inputs.app}}
-      #     openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
-      #   run: |
-      #     oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.latestgitsha }}.${{ env.gitsha }}"}}}}}'
+      # Labels the deployment config of the application with latest gitsha to spin up the pods labelled in same version
+      - name: Labelling DC of jag-document-utils-api to latest gitsha
+        env:
+          latestgitsha: ${{ env.gitsha }}
+          appName: ${{github.event.inputs.app}}
+          openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
+        run: |
+          oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.latestgitsha }}.${{ env.gitsha }}"}}}}}'
       
-      # # Wait to DC rollout of jag-document-utils-api to get completed
-      # - name: Wait for DC rollout of jag-document-utils-api
-      #   env:
-      #     appName: ${{github.event.inputs.app}}
-      #     openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
-      #   run: |
-      #     oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
+      # Wait to DC rollout of jag-document-utils-api to get completed
+      - name: Wait for DC rollout of jag-document-utils-api
+        env:
+          appName: ${{github.event.inputs.app}}
+          openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
+        run: |
+          oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch

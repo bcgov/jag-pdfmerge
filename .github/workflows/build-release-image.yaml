@@ -1,8 +1,10 @@
 name: Docker Build and Push Git Release Version
 
-on: 
-  release:
-    types: [published]
+on:
+  workflow_dispatch:
+    branches: [main]
+  # release:
+  #   types: [published]
 
 jobs:
   docker:

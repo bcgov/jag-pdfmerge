@@ -3,8 +3,8 @@ name: Docker Build and Push Latest
 on:
   workflow_dispatch:
     branches: [main]
-  push:
-    branches: [main]
+  # push:
+  #   branches: [main]
 
 jobs:
   docker:
