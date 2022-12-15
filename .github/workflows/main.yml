@@ -47,12 +47,61 @@ jobs:
           echo "Release Environment: ${{ github.event.inputs.env }}"
           echo "Release Git Sha: ${{env.gitsha}}"
       
-      - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1
+      #Build image jag-document-utils-api
+      - name: Build image jag-document-utils-api
+        env:
+          COMPOSE_DOCKER_CLI_BUILD: 1
+          DOCKER_BUILDKIT: 1
+          APP: ${{github.event.inputs.app}}
+          CONTEXT: ./src/document-utils-api
+        run: |
+          docker build \
+          -t ${APP}:${{env.gitsha}} \
+          --build-arg MVN_PROFILE=openshift \
+          --build-arg SKIP_TESTS=true \
+          ${CONTEXT}
+      
+      #Login to OpenShift Container Repository
+      - name: Login to OpenShift Container Repository
+        uses: docker/login-action@v2
         with:
-          openshift_server_url: ${{ secrets.OPENSHIFT_SERVER_URL }}
-          openshift_token: ${{ secrets.OPENSHIFT_SA_PIPELINE_TOKEN }}
-          namespace: ${{ secrets.OPENSHIFT_TOOLS_NAMESPACE }}
+          registry: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}
+          username: ${{secrets.OPENSHIFT_SA_USERNAME}}
+          password: ${{secrets.OPENSHIFT_SA_PASSWORD}}
 
-      - name: Trigger Build Config
-        run: oc start-build ${{ github.event.inputs.app }} --wait
+      #Push image jag-document-utils-api to OpenShift Image stream
+      - name: Push Image jag-document-utils-api to Openshift Image Stream
+        env:
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app}}:latest
+          #IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/${{github.event.inputs.app}}:${{ github.event.inputs.env }}
+        run: |
+          docker tag ${{github.event.inputs.app}}:${{env.gitsha}} ${IMAGE}
+          docker push ${IMAGE}
+      
+      # #Login to Openshift using OC SA and Token of respective env. for Pod labelling
+      # - name: Authenticate OC Env Specific SA
+      #   uses: redhat-actions/oc-login@v1
+      #   env:
+      #     OPENSHIFT_NAMESPACE: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
+      #     OPENSHIFT_USER: ${{secrets.OPENSHIFT_SA_Env_DEPLOYER_NAME}}
+      #   with:
+      #     openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
+      #     openshift_token: ${{secrets.OPENSHIFT_SA_ENV_DEPLOYER_TOKEN}}
+      #     namespace: ${OPENSHIFT_NAMESPACE}
+      
+      # # Labels the deployment config of the application with latest gitsha to spin up the pods labelled in same version
+      # - name: Labelling DC of jag-document-utils-api to latest gitsha
+      #   env:
+      #     latestgitsha: ${{ env.gitsha }}
+      #     appName: ${{github.event.inputs.app}}
+      #     openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
+      #   run: |
+      #     oc patch dc ${appName} -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.latestgitsha }}.${{ env.gitsha }}"}}}}}'
+      
+      # # Wait to DC rollout of jag-document-utils-api to get completed
+      # - name: Wait for DC rollout of jag-document-utils-api
+      #   env:
+      #     appName: ${{github.event.inputs.app}}
+      #     openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ github.event.inputs.env }}
+      #   run: |
+      #     oc rollout status -n ${openshiftEnvNamespace} dc/${appName} --watch
