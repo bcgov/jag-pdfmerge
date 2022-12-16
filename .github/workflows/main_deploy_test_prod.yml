@@ -10,6 +10,7 @@ on:
         required: true
         default: 'jag-document-utils-api'
       imageSourceEnv:
+        type: choice
         description: Image Source environment
         options: 
         - dev    
@@ -36,11 +37,11 @@ jobs:
           echo "Release Source Environment: ${{ github.event.inputs.imageSourceEnv }}"
           echo "Release Target Environment: ${{ github.event.inputs.imageTargetEnv }}"
       
-        # Get Timestamp
+        # Get current Timestamp to be used for backup tag
       - name: Get Timestamp
         id: gettime
         run: |
-          currentdatetime=$(echo date +"%Y_%m_%d_%Z")
+          currentdatetime=$(date +"%Y-%m-%d_%H-%M_%Z")
           echo "timestamp=$currentdatetime" >> $GITHUB_ENV
       
         #Login to Openshift using OC Tools SA and Token for image stream tagging changes
@@ -64,7 +65,7 @@ jobs:
           openshiftIImageRegistry: ${{secrets.OPENSHIFT_INTERNAL_REPOSITORY}}
           timestamp: ${{ env.timestamp }}
         run: |
-          oc tag ${openshiftIImageRegistry}/${openshiftToolsNamespace}/${appName}:prod ${appName}:prod-backup-${timestamp}
+          oc tag ${openshiftIImageRegistry}/${openshiftToolsNamespace}/${appName}:prod ${appName}:prod_backup_${timestamp}
         
         # Re-Tag latest dev (source) image to other env to trigger openshift deployment via DeploymentConfig
       - name: Retag dev image to target release env to trigger deployment
