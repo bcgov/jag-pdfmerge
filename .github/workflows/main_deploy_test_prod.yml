@@ -37,7 +37,7 @@ jobs:
           echo "Release Source Environment: ${{ github.event.inputs.imageSourceEnv }}"
           echo "Release Target Environment: ${{ github.event.inputs.imageTargetEnv }}"
       
-        # Get Timestamp
+        # Get current Timestamp to be used for backup tag
       - name: Get Timestamp
         id: gettime
         run: |
@@ -65,7 +65,7 @@ jobs:
           openshiftIImageRegistry: ${{secrets.OPENSHIFT_INTERNAL_REPOSITORY}}
           timestamp: ${{ env.timestamp }}
         run: |
-          oc tag ${openshiftIImageRegistry}/${openshiftToolsNamespace}/${appName}:dev ${appName}:exp-backup-${timestamp}
+          oc tag ${openshiftIImageRegistry}/${openshiftToolsNamespace}/${appName}:prod ${appName}:prod_backup_${timestamp}
         
         # Re-Tag latest dev (source) image to other env to trigger openshift deployment via DeploymentConfig
       - name: Retag dev image to target release env to trigger deployment
@@ -76,4 +76,4 @@ jobs:
           openshiftToolsNamespace: ${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}
           openshiftIImageRegistry: ${{secrets.OPENSHIFT_INTERNAL_REPOSITORY}}
         run: |
-          oc tag ${openshiftIImageRegistry}/${openshiftToolsNamespace}/${appName}:${imageSourceEnv} ${appName}:exp
+          oc tag ${openshiftIImageRegistry}/${openshiftToolsNamespace}/${appName}:${imageSourceEnv} ${appName}:${imageTargetEnv}
