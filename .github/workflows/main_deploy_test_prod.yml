@@ -41,7 +41,7 @@ jobs:
       - name: Get Timestamp
         id: gettime
         run: |
-          currentdatetime=$(echo date +"%Y_%m_%d_%Z")
+          currentdatetime=$(date +"%Y_%m_%d_%Z")
           echo "timestamp=$currentdatetime" >> $GITHUB_ENV
           echo $currentdatetime
           echo $timestamp
