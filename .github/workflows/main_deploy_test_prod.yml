@@ -12,17 +12,21 @@ on:
       imageSourceEnv:
         type: choice
         description: Image Source environment
-        options: 
-        - dev    
+        options:
+        - Select a Source Env Image to deploy
+        - dev
+        - test   
         required: true
-        default: 'dev'
+        default: 'Select a Source Env Image to deploy'
       imageTargetEnv:
         type: choice
         description: Target Release Environment
-        options: 
+        options:
+        - Select a Target Env to deploy the Source Image
         - test
         - prod    
         required: true
+        default: 'Select a Target Env to deploy the Source Image'
 
 jobs:
   oc-image-tagging:
