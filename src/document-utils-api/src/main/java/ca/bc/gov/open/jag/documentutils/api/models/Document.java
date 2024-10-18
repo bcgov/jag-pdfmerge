@@ -3,7 +3,7 @@ package ca.bc.gov.open.jag.documentutils.api.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 @JsonPropertyOrder({ "index", "data", "title" })
 public class Document {
