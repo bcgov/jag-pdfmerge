@@ -159,6 +159,12 @@
 			<version>4.2.1</version>
 		</dependency>
 
+		<dependency>
+			<groupId>dev.akkinoc.spring.boot</groupId>
+			<artifactId>logback-access-spring-boot-starter</artifactId>
+			<version>4.1.1</version>
+		</dependency>
+
 		<!-- Non updatable but required to run -->
 		<dependency>
 			<groupId>org.apache.axis</groupId>
