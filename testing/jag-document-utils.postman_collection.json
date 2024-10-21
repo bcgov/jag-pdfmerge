@@ -1,0 +1,122 @@
+{
+	"info": {
+		"_postman_id": "9c6e2805-f935-4237-afed-77f442808f56",
+		"name": "jag-document-utils",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7463243"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get jwt\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.environment.set(\"jwt\", jsonData.access_token);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "default"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{keycloakCredentail}}",
+									"type": "default"
+								},
+								{
+									"key": "client_id",
+									"value": "justin",
+									"type": "default"
+								},
+								{
+									"key": "scope",
+									"value": "",
+									"type": "default",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{keycloakUrl}}",
+							"host": [
+								"{{keycloakUrl}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "merge",
+			"item": [
+				{
+					"name": "doc merge",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Correlation-ID",
+								"value": "1231231",
+								"type": "default"
+							},
+							{
+								"key": "X-Client-ID",
+								"value": "123123",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"options\":{\n      \"forcePDFAOnLoad\": true,\n      \"createToC\": false\n   },\n   \"documents\":[\n      {\n         \"id\":\"optional\",\n         \"docType\":\"pdf\",\n         \"order\":1,\n         \"data\": {{fileDat}}\n      }\n   ]\n}"
+						},
+						"url": {
+							"raw": "{{baseApiUrl}}/document/merge",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"document",
+								"merge"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
