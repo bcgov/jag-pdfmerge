@@ -58,7 +58,7 @@ public class AemServiceImplTest {
     @BeforeEach
     public void beforeEach() throws OperationException, DSCException, IOException, ConversionException {
 
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
 
         Mockito
                 .doReturn(assemblerResultMock)

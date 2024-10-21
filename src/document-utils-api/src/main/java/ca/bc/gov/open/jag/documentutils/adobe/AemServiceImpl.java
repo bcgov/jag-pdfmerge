@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Base64Utils;
+import java.util.Base64;
 
 import com.adobe.idp.Document;
 import com.adobe.idp.dsc.clientsdk.ServiceClientFactory;
@@ -152,7 +152,7 @@ public class AemServiceImpl implements AemService {
 
     private MergeDoc buildMergeDoc(ca.bc.gov.open.jag.documentutils.api.models.Document doc, DocMergeRequest request) {
 
-        byte[] docBytes = Base64Utils.decode(doc.getData().getBytes());
+        byte[] docBytes = Base64.getDecoder().decode(doc.getData().getBytes());
 
         if (request.getOptions().isForcePDFAOnLoad() && PDFBoxUtilities.isPDFXfa(docBytes)) {
             logger.info("forcePDFA is on and document, order {}, is XFA. Converting to PDF/A...", doc.getIndex());
@@ -165,7 +165,7 @@ public class AemServiceImpl implements AemService {
 
     private String buildOutputDocument(Document document) {
         try {
-            return Base64Utils.encodeToString(IOUtils.toByteArray(document.getInputStream()));
+            return Base64.getEncoder().encodeToString(IOUtils.toByteArray(document.getInputStream()));
         } catch (IOException e) {
             logger.error("Error creating pdf a ", e);
             throw new MergeException("Error creating a pdf", e);
