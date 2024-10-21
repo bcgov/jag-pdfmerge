@@ -2,7 +2,6 @@ package ca.bc.gov.open.jag.documentutils.api.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import jakarta.validation.Valid;
 
 import java.util.List;

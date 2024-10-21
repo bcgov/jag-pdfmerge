@@ -1,12 +1,13 @@
 package ca.bc.gov.open.jag.documentutils.controller;
 
+import ca.bc.gov.open.jag.documentutils.adobe.AemService;
 import ca.bc.gov.open.jag.documentutils.api.DocumentController;
 import ca.bc.gov.open.jag.documentutils.api.models.DocMergeRequest;
 import ca.bc.gov.open.jag.documentutils.api.models.DocMergeResponse;
 import ca.bc.gov.open.jag.documentutils.api.models.Document;
 import ca.bc.gov.open.jag.documentutils.api.models.Options;
-import ca.bc.gov.open.jag.documentutils.adobe.AemService;
 import ca.bc.gov.open.jag.documentutils.exception.MergeException;
+import jakarta.validation.Valid;
 import org.junit.jupiter.api.*;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
@@ -15,7 +16,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import jakarta.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 

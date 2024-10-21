@@ -2,7 +2,6 @@ package ca.bc.gov.open.jag.documentutils.exception;
 
 import ca.bc.gov.open.jag.documentutils.Keys;
 import ca.bc.gov.open.jag.documentutils.api.models.ApiError;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -23,8 +22,6 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.List;
 

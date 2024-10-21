@@ -4,8 +4,7 @@ import ca.bc.gov.open.jag.documentutils.Keys;
 import ca.bc.gov.open.jag.documentutils.adobe.AemService;
 import ca.bc.gov.open.jag.documentutils.api.models.DocMergeRequest;
 import ca.bc.gov.open.jag.documentutils.api.models.DocMergeResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +13,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.annotation.security.RolesAllowed;
 
 
 /**
@@ -29,7 +26,6 @@ import jakarta.annotation.security.RolesAllowed;
 @RestController
 @Validated
 @RequestMapping("document")
-@Api(tags = "Document Api")
 @Scope("request")
 public class DocumentController {
 
@@ -41,7 +37,6 @@ public class DocumentController {
 		this.aemService = aemService;
 	}
 
-	@ApiOperation("Merge a collection of PDF Document")
 	@PostMapping(value = {"/merge" },
 			consumes = MediaTypes.APPLICATION_JSON,
 			produces = MediaTypes.APPLICATION_JSON)
