@@ -22,7 +22,6 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Executable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,13 +37,13 @@ public class GlobalControllerAdviceTest {
     private BindingResult bindingResultMock;
     @Mock
     private MethodParameter parameterMock;
-    @Mock
-    private Executable executableMock;
+    //@Mock
+    //private Executable executableMock;
 
     @BeforeEach
     public void beforeEach() {
 
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
 
         sut = new GlobalControllerAdvice();
 
@@ -119,7 +118,7 @@ public class GlobalControllerAdviceTest {
 
     @Test
     @DisplayName("400: with MethodArgumentNotValidException should return ApiError")
-    public void testhandleValidationExceptions() {
+    public void testhandleValidationExceptions() throws NoSuchMethodException {
 
         Mockito.when(webRequestMock.getHeader(Mockito.eq(Keys.CORRELATION_ID))).thenReturn(TRANSACTION_ID);
 
@@ -130,19 +129,23 @@ public class GlobalControllerAdviceTest {
         Mockito.when(bindingResultMock.getAllErrors()).thenReturn(errors);
 
         Mockito.when(parameterMock.getParameterIndex()).thenReturn(0);
-        Mockito.when(parameterMock.getExecutable()).thenReturn(executableMock);
-        Mockito.when(executableMock.toGenericString()).thenReturn("string");
+        Mockito.when(parameterMock.getExecutable()).thenReturn(
+                this.getClass().getDeclaredMethod("fake", GlobalControllerAdviceTest.class));
 
         MethodArgumentNotValidException exception = new MethodArgumentNotValidException(parameterMock, bindingResultMock);
         ResponseEntity<ApiError> actual = sut.handleValidationExceptions(exception, webRequestMock);
 
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
         Assertions.assertEquals(TRANSACTION_ID, actual.getBody().getTransactionId());
-        Assertions.assertEquals("Validation failed for argument [0] in string with 2 errors: [Field error in object 'param' on field 'first': rejected value [null]; codes []; arguments []; default message [message]] ", actual.getBody().getDetail());
+        Assertions.assertEquals("Validation failed for argument [0] in private void ca.bc.gov.open.jag.documentutils.exception.GlobalControllerAdviceTest.fake(ca.bc.gov.open.jag.documentutils.exception.GlobalControllerAdviceTest) with 2 errors: [Field error in object 'param' on field 'first': rejected value [null]; codes []; arguments []; default message [message]] ", actual.getBody().getDetail());
         Assertions.assertEquals("MethodArgumentNotValidException", actual.getBody().getError());
         Assertions.assertEquals("Unknown exception while trying to merge documents.", actual.getBody().getMessage());
 
     }
 
+    //This is to fake the executable that can no longet be mocked in java 17
+    private void fake(ca.bc.gov.open.jag.documentutils.exception.GlobalControllerAdviceTest fake) {
+
+    }
 
 }

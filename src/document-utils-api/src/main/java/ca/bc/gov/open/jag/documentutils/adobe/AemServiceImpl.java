@@ -1,18 +1,11 @@
 package ca.bc.gov.open.jag.documentutils.adobe;
 
-import java.io.IOException;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Base64Utils;
-
+import ca.bc.gov.open.jag.documentutils.adobe.models.MergeDoc;
+import ca.bc.gov.open.jag.documentutils.api.MediaTypes;
+import ca.bc.gov.open.jag.documentutils.api.models.DocMergeRequest;
+import ca.bc.gov.open.jag.documentutils.api.models.DocMergeResponse;
+import ca.bc.gov.open.jag.documentutils.exception.MergeException;
+import ca.bc.gov.open.jag.documentutils.utils.PDFBoxUtilities;
 import com.adobe.idp.Document;
 import com.adobe.idp.dsc.clientsdk.ServiceClientFactory;
 import com.adobe.livecycle.assembler.client.AssemblerOptionSpec;
@@ -23,13 +16,18 @@ import com.adobe.livecycle.docconverter.client.ConversionException;
 import com.adobe.livecycle.docconverter.client.DocConverterServiceClient;
 import com.adobe.livecycle.docconverter.client.PDFAConversionOptionSpec;
 import com.adobe.livecycle.docconverter.client.PDFAConversionResult;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
-import ca.bc.gov.open.jag.documentutils.adobe.models.MergeDoc;
-import ca.bc.gov.open.jag.documentutils.api.MediaTypes;
-import ca.bc.gov.open.jag.documentutils.api.models.DocMergeRequest;
-import ca.bc.gov.open.jag.documentutils.api.models.DocMergeResponse;
-import ca.bc.gov.open.jag.documentutils.exception.MergeException;
-import ca.bc.gov.open.jag.documentutils.utils.PDFBoxUtilities;
+import java.io.IOException;
+import java.util.Base64;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -152,7 +150,7 @@ public class AemServiceImpl implements AemService {
 
     private MergeDoc buildMergeDoc(ca.bc.gov.open.jag.documentutils.api.models.Document doc, DocMergeRequest request) {
 
-        byte[] docBytes = Base64Utils.decode(doc.getData().getBytes());
+        byte[] docBytes = Base64.getDecoder().decode(doc.getData().getBytes());
 
         if (request.getOptions().isForcePDFAOnLoad() && PDFBoxUtilities.isPDFXfa(docBytes)) {
             logger.info("forcePDFA is on and document, order {}, is XFA. Converting to PDF/A...", doc.getIndex());
@@ -165,7 +163,7 @@ public class AemServiceImpl implements AemService {
 
     private String buildOutputDocument(Document document) {
         try {
-            return Base64Utils.encodeToString(IOUtils.toByteArray(document.getInputStream()));
+            return Base64.getEncoder().encodeToString(IOUtils.toByteArray(document.getInputStream()));
         } catch (IOException e) {
             logger.error("Error creating pdf a ", e);
             throw new MergeException("Error creating a pdf", e);

@@ -1,10 +1,9 @@
 package ca.bc.gov.open.jag.documentutils;
 
-import java.io.*;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
-import java.util.Arrays;
 
 public class TestHelpers {
     private TestHelpers() {}
